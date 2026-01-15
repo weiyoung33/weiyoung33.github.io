@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Styled Profile</title>
+    
+    <style>
+        /* 1. Body: Sets the default font and background */
+        body {
+            font-family: 'Arial', sans-serif; /* Clean modern font */
+            background-color: #f7f7f7;        /* Light gray background */
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 2. Container: Centers content like a card */
+        .card {
+            background-color: white;
+            width: 60%;              /* Takes up 60% of screen */
+            margin: 50px auto;       /* 50px top/bottom, 'auto' centers it left/right */
+            padding: 40px;           /* Space inside the card */
+            border-radius: 20px;     /* Rounded corners */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); /* Subtle shadow drop */
+            text-align: center;      /* Centers text */
+        }
+
+        /* 3. Typography */
+        h1 {
+            color: #58CC02; /* Duolingo Green */
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+        
+        p {
+            color: #777;    /* Dark gray text is easier to read than black */
+            line-height: 1.6; /* More space between lines */
+        }
+
+        /* 4. Styling a Button (The Link) */
+        .btn {
+            background-color: #58CC02;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none; /* Removes underline */
+            border-radius: 12px;
+            font-weight: bold;
+            display: inline-block; /* Allows padding to work on links */
+            margin-top: 20px;
+            border-bottom: 4px solid #46a302; /* Makes it look 3D */
+        }
+
+        .btn:hover {
+            background-color: #46a302; /* Darker green when hovering */
+            top: 2px; /* Moves down slightly for click effect */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>Hello, World!</h1>
+        <p>I am learning to code HTML & CSS.</p>
+        
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+        <h2>My Goal</h2>
+        <p>To build a stock prediction dashboard for <strong>Duolingo</strong>.</p>
+        
+        <a href="https://duolingo.com" class="btn">Get Started</a>
+    </div>
+
+</body>
+</html>
