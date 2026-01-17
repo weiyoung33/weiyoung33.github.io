@@ -7,7 +7,7 @@
         /* 1. Body: Sets the default font and background */
         body {
             font-family: 'Arial', sans-serif; /* Clean modern font */
-            background-color: #f7f7f7;        /* Light gray background */
+            background-color: #f7f7f8;        /* Light gray background */
             margin: 0;
             padding: 0;
         }
@@ -25,7 +25,7 @@
 
         /* 3. Typography */
         h1 {
-            color: #58CC02; /* Duolingo Green */
+            color: #37ecaf; /* Duolingo Green */
             font-size: 40px;
             margin-bottom: 10px;
         }
@@ -65,7 +65,28 @@
         <h2>My Goal</h2>
         <p>To build a stock prediction dashboard for <strong>Duolingo</strong>.</p>
         
-        <a href="https://duolingo.com" class="btn">Get Started</a>
+        <button class="btn" onclick="predictStock()">Generate Prediction</button>
+
+<p id="result" style="font-weight: bold; margin-top: 20px;"></p>
+
+<script>
+    function predictStock() {
+        // 1. Get the paragraph where we will show the result
+        let resultText = document.getElementById("result");
+
+        // 2. Generate a random price between $150 and $200
+        let randomPrice = Math.floor(Math.random() * (200 - 150) + 150);
+
+        // 3. Simple logic: If price is low, BUY. If high, SELL.
+        if (randomPrice < 170) {
+            resultText.innerHTML = "Prediction: 🟢 BUY! Target: $" + randomPrice;
+            resultText.style.color = "green";
+        } else {
+            resultText.innerHTML = "Prediction: 🔴 SELL! Target: $" + randomPrice;
+            resultText.style.color = "red";
+        }
+    }
+</script>
     </div>
 
 </body>
