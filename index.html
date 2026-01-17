@@ -1,93 +1,191 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My Styled Profile</title>
+    <title>Neo Wei Young | Data Analyst</title>
     
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
-        /* 1. Body: Sets the default font and background */
-        body {
-            font-family: 'Arial', sans-serif; /* Clean modern font */
-            background-color: #f7f7f8;        /* Light gray background */
-            margin: 0;
-            padding: 0;
-        }
-
-        /* 2. Container: Centers content like a card */
-        .card {
-            background-color: white;
-            width: 60%;              /* Takes up 60% of screen */
-            margin: 50px auto;       /* 50px top/bottom, 'auto' centers it left/right */
-            padding: 40px;           /* Space inside the card */
-            border-radius: 20px;     /* Rounded corners */
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); /* Subtle shadow drop */
-            text-align: center;      /* Centers text */
-        }
-
-        /* 3. Typography */
-        h1 {
-            color: #37ecaf; /* Duolingo Green */
-            font-size: 40px;
-            margin-bottom: 10px;
-        }
+        /* --- GLOBAL STYLES --- */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; overflow-x: hidden; }
         
-        p {
-            color: #777;    /* Dark gray text is easier to read than black */
-            line-height: 1.6; /* More space between lines */
+        /* --- INTRO SECTION --- */
+        #intro {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 50; padding: 40px; box-sizing: border-box; text-align: center;
+            transition: opacity 0.1s ease-out;
         }
 
-        /* 4. Styling a Button (The Link) */
-        .btn {
-            background-color: #58CC02;
-            color: white;
-            padding: 15px 30px;
-            text-decoration: none; /* Removes underline */
-            border-radius: 12px;
-            font-weight: bold;
-            display: inline-block; /* Allows padding to work on links */
-            margin-top: 20px;
-            border-bottom: 4px solid #46a302; /* Makes it look 3D */
+        .quote-img {
+            position: absolute; top: 40px; right: 60px; width: 350px; opacity: 0.9;
+            transform: rotate(5deg); box-shadow: 5px 5px 15px rgba(0,0,0,0.2); z-index: 100;
+        }
+        @media (max-width: 900px) { .quote-img { display: none; } }
+
+        .intro-content { max-width: 800px; min-height: 400px; }
+        .intro-title { color: #2c3e50; font-size: 3em; margin-bottom: 20px; font-weight: 800; }
+        .intro-text { color: #444; font-size: 1.25em; line-height: 1.8; margin-bottom: 25px; }
+        
+        /* Typewriter Cursor */
+        .cursor { display: inline-block; width: 3px; background-color: #333; animation: blink 1s infinite; margin-left: 5px; }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 1; } }
+        .fade-in-wait { opacity: 0; transition: opacity 1.5s ease-in; }
+        .visible { opacity: 1; }
+
+        .hobby-text {
+            color: #555; font-size: 1.1em; font-style: italic; margin-top: 30px;
+            border-top: 1px solid #ccc; padding-top: 20px; display: inline-block; max-width: 600px;
+        }
+        .scroll-hint { margin-top: 50px; color: #888; font-weight: bold; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-10px);} 60% {transform: translateY(-5px);} }
+
+        /* --- MAIN CONTAINER --- */
+        .container {
+            position: relative; z-index: 10; max-width: 900px; margin: 100vh auto 40px auto;
+            background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
 
-        .btn:hover {
-            background-color: #46a302; /* Darker green when hovering */
-            top: 2px; /* Moves down slightly for click effect */
-        }
+        #map { height: 450px; width: 100%; border-radius: 12px; border: 2px solid #e0e0e0; margin-top: 20px; }
+        
+        /* Financial Chart Card */
+        .card-box { margin-top: 40px; padding: 25px; background: #fff; border: 1px solid #e0e0e0; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .chart-container { position: relative; height: 350px; width: 100%; margin-top: 20px; }
+        .stat-badge { background: #fff3cd; color: #856404; padding: 5px 10px; border-radius: 5px; font-size: 0.85em; font-weight: bold; display: inline-block; margin-bottom: 10px; }
+
+        /* --- POPUP & IMAGES --- */
+        .popup-content { text-align: center; width: 300px; }
+        .image-grid { display: flex; gap: 5px; margin-top: 10px; justify-content: center; }
+        .popup-img { width: 48%; height: 80px; object-fit: cover; border-radius: 5px; border: 1px solid #ddd; cursor: zoom-in; transition: transform 0.2s; }
+        .popup-img:hover { transform: scale(1.05); border-color: #3498db; }
+        .tag { background-color: #e8f5e9; color: #2e7d32; padding: 2px 8px; border-radius: 12px; font-size: 0.8em; font-weight: bold; }
+        
+        .nav-btn { background-color: #3498db; color: white; border: none; padding: 10px 20px; border-radius: 20px; margin-right: 10px; cursor: pointer; font-weight: bold; transition: transform 0.2s; }
+        .nav-btn:hover { transform: scale(1.05); background-color: #2980b9; }
+        .modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); justify-content: center; align-items: center; cursor: zoom-out; }
+        .modal-content { max-width: 90%; max-height: 90%; border-radius: 5px; animation: zoom 0.3s; }
+        @keyframes zoom { from {transform:scale(0)} to {transform:scale(1)} }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <h1>Hello, World123!</h1>
-        <p>I am learning to code HTML & CSS.</p>
-        
-        <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
-
-        <h2>My Goal</h2>
-        <p>To build a stock prediction dashboard for <strong>Duolingo</strong>.</p>
-        
-        <button class="btn" onclick="predictStock()">Generate Prediction</button>
-
-<p id="result" style="font-weight: bold; margin-top: 20px;"></p>
-
-<script>
-    function predictStock() {
-        // 1. Get the paragraph where we will show the result
-        let resultText = document.getElementById("result");
-
-        // 2. Generate a random price between $150 and $200
-        let randomPrice = Math.floor(Math.random() * (200 - 150) + 150);
-
-        // 3. Simple logic: If price is low, BUY. If high, SELL.
-        if (randomPrice < 170) {
-            resultText.innerHTML = "Prediction: 🟢 BUY! Target: $" + randomPrice;
-            resultText.style.color = "green";
-        } else {
-            resultText.innerHTML = "Prediction: 🔴 SELL! Target: $" + randomPrice;
-            resultText.style.color = "red";
-        }
-    }
-</script>
+    <div id="intro">
+        <img src="quote.png" class="quote-img">
+        <div class="intro-content">
+            <div class="intro-title" id="type-title"></div>
+            <div class="intro-text" id="type-bio"></div>
+            <div id="delayed-content" class="fade-in-wait">
+                <p class="intro-text">Naturally curious and analytical, I love breaking down problems and uncovering actionable insights to drive meaningful decisions.</p>
+                <div class="hobby-text">"In my downtime, I enjoy immersing myself in a good book... Reading fuels my creativity, inspiring me to approach challenges with both empathy and innovation."</div>
+                <div class="scroll-hint">Scroll down to see my work<br>⬇</div>
+            </div>
+        </div>
     </div>
 
+    <div id="imageModal" class="modal" onclick="closeModal()"><img class="modal-content" id="fullImage"></div>
+
+    <div class="container">
+        <h1>My Data Journey</h1>
+        <p style="color: #7f8c8d;">Business Analytics Undergraduate @ NUS</p>
+        <hr style="border: 0; border-top: 1px solid #eee;">
+
+        <h3>🗺️ Geospatial Analysis</h3>
+        <p>Explore how I apply technical skills (Python, SQL, Tableau) across global contexts.</p>
+        <div style="margin-bottom: 15px;">
+            <button class="nav-btn" onclick="flyTo('singapore')">📍 Education (Singapore)</button>
+            <button class="nav-btn" onclick="flyTo('brazil')">📊 Market Analysis (Brazil)</button>
+        </div>
+        <div id="map"></div>
+        
+        <div class="card-box">
+            <h3 style="margin-bottom: 5px;">📈 Gold Price vs. Volatility Risk</h3>
+            <span class="stat-badge">Financial Modeling</span> <span class="stat-badge">Risk Analytics</span>
+            <p style="font-size: 0.95em; color: #555; margin-top: 10px;">
+                This interactive chart quantifies the <strong>risk-return relationship</strong> of Gold. 
+                It visualizes how market volatility (Grey) often correlates with significant price movements (Gold).
+            </p>
+            <div class="chart-container"><canvas id="goldChart"></canvas></div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- A. TYPEWRITER ---
+        const titleText = "Hi, I'm Neo Wei Young.";
+        const bioText = "As an aspiring Business Analytics professional, I thrive on solving complex challenges by combining data-driven insights with creative problem-solving.";
+        const titleElement = document.getElementById("type-title");
+        const bioElement = document.getElementById("type-bio");
+        const delayedContent = document.getElementById("delayed-content");
+        let i = 0, j = 0;
+
+        function typeTitle() {
+            if (i < titleText.length) { titleElement.innerHTML += titleText.charAt(i); i++; setTimeout(typeTitle, 50); } 
+            else { titleElement.innerHTML += '<span class="cursor">|</span>'; setTimeout(() => { titleElement.innerHTML = titleText; typeBio(); }, 800); }
+        }
+        function typeBio() {
+            if (j === 0) bioElement.innerHTML = '<span class="cursor">|</span>';
+            if (j < bioText.length) { bioElement.innerHTML = bioText.substring(0, j + 1) + '<span class="cursor">|</span>'; j++; setTimeout(typeBio, 30); } 
+            else { setTimeout(() => { delayedContent.classList.add("visible"); }, 500); }
+        }
+        window.onload = function() { setTimeout(typeTitle, 500); };
+
+        // --- B. SCROLL FADE ---
+        window.addEventListener('scroll', function() {
+            var intro = document.getElementById('intro');
+            var opacity = 1 - (window.scrollY / (window.innerHeight * 0.5));
+            intro.style.opacity = (opacity >= 0) ? opacity : 0;
+            intro.style.pointerEvents = (opacity >= 0) ? 'auto' : 'none';
+        });
+
+        // --- C. MAP SETUP ---
+        var osmLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' });
+        var satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19, attribution: '© Esri' });
+        var map = L.map('map', { center: [20, 0], zoom: 2, layers: [osmLayer] });
+        L.control.layers({ "Standard Map": osmLayer, "Satellite View": satelliteLayer }).addTo(map);
+
+        document.addEventListener('click', function(e) { if (e.target && e.target.classList.contains('popup-img')) { document.getElementById("imageModal").style.display = "flex"; document.getElementById("fullImage").src = e.target.src; } });
+        function closeModal() { document.getElementById("imageModal").style.display = "none"; }
+
+        var nusLoc = [1.2944, 103.7744];
+        var nusMarker = L.marker(nusLoc).addTo(map);
+        nusMarker.bindPopup(`<div class="popup-content"><strong>NUS School of Computing</strong><br><span class="tag">COM3 Building</span><p style="font-size:0.9em; margin:10px 0;">Where I build my full-stack projects.</p><a href="https://www.google.com/maps/search/?api=1&query=NUS+COM3" target="_blank" style="color:#3498db; text-decoration:none;">➡️ Open in Google Maps</a></div>`);
+
+        var brazilLoc = [-14.2350, -51.9253];
+        var brazilMarker = L.marker(brazilLoc).addTo(map);
+        brazilMarker.bindPopup(`<div class="popup-content"><strong>Brazil Consumer Analysis</strong><br><span class="tag">Python & Tableau</span><div class="image-grid"><img src="brazil_chart1.png" class="popup-img"><img src="brazil_chart2.png" class="popup-img"></div><p style="font-size:0.9em; margin:10px 0;">Applied <em>K-Means Clustering</em> to optimize locations.</p></div>`);
+
+        function flyTo(loc) {
+            if (loc === 'singapore') { map.flyTo(nusLoc, 18, { duration: 2.5 }); map.removeLayer(osmLayer); map.addLayer(satelliteLayer); setTimeout(() => nusMarker.openPopup(), 2500); }
+            else if (loc === 'brazil') { map.flyTo(brazilLoc, 4, { duration: 2.5 }); map.removeLayer(satelliteLayer); map.addLayer(osmLayer); setTimeout(() => brazilMarker.openPopup(), 2500); }
+        }
+
+        // --- D. FINANCIAL CHART ---
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const goldPrice = [1800, 1820, 1810, 1850, 1900, 1920, 1880, 1950, 2000, 2050, 2020, 2100]; 
+        const volatility = [12, 10, 15, 14, 25, 20, 15, 18, 22, 30, 18, 15]; 
+
+        const ctx = document.getElementById('goldChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar', 
+            data: {
+                labels: months,
+                datasets: [
+                    { label: 'Gold Price ($)', data: goldPrice, type: 'line', borderColor: '#FFD700', backgroundColor: 'rgba(255, 215, 0, 0.2)', borderWidth: 3, yAxisID: 'y', tension: 0.4 },
+                    { label: 'Volatility Risk (%)', data: volatility, type: 'bar', backgroundColor: 'rgba(128, 128, 128, 0.4)', yAxisID: 'y1' }
+                ]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
+                plugins: { legend: { position: 'top' }, tooltip: { enabled: true } },
+                scales: {
+                    y: { type: 'linear', display: true, position: 'left', title: { display: true, text: 'Price (USD)' } },
+                    y1: { type: 'linear', display: true, position: 'right', title: { display: true, text: 'Volatility Index' }, grid: { drawOnChartArea: false } }
+                }
+            }
+        });
+    </script>
 </body>
 </html>
