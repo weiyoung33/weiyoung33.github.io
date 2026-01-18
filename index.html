@@ -51,7 +51,7 @@
 
         #map { height: 450px; width: 100%; border-radius: 12px; border: 2px solid #e0e0e0; margin-top: 20px; }
         
-        /* Financial Chart Card */
+        /* Cards & Charts */
         .card-box { margin-top: 40px; padding: 25px; background: #fff; border: 1px solid #e0e0e0; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .chart-container { position: relative; height: 350px; width: 100%; margin-top: 20px; }
         .stat-badge { background: #fff3cd; color: #856404; padding: 5px 10px; border-radius: 5px; font-size: 0.85em; font-weight: bold; display: inline-block; margin-bottom: 10px; }
@@ -68,6 +68,13 @@
         .modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); justify-content: center; align-items: center; cursor: zoom-out; }
         .modal-content { max-width: 90%; max-height: 90%; border-radius: 5px; animation: zoom 0.3s; }
         @keyframes zoom { from {transform:scale(0)} to {transform:scale(1)} }
+
+        /* Sliders */
+        .slider-group { margin-bottom: 10px; }
+        .slider-group label { display: block; font-size: 0.85em; margin-bottom: 3px; font-weight: 600; color: #555; }
+        .slider { -webkit-appearance: none; width: 100%; height: 6px; background: #ddd; border-radius: 5px; outline: none; }
+        .slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; border-radius: 50%; background: #3498db; cursor: pointer; transition: background .15s ease-in-out; }
+        .slider::-webkit-slider-thumb:hover { background: #2980b9; }
     </style>
 </head>
 <body>
@@ -95,8 +102,8 @@
         <h3>🗺️ Geospatial Analysis</h3>
         <p>Explore how I apply technical skills (Python, SQL, Tableau) across global contexts.</p>
         <div style="margin-bottom: 15px;">
-            <button class="nav-btn" onclick="flyTo('singapore')">📍 Education (Singapore)</button>
-            <button class="nav-btn" onclick="flyTo('brazil')">📊 Market Analysis (Brazil)</button>
+            <button class="nav-btn" onclick="flyTo('singapore')"> Education (Singapore)</button>
+            <button class="nav-btn" onclick="flyTo('brazil')"> Market Analysis (Brazil)</button>
         </div>
         <div id="map"></div>
         
@@ -105,9 +112,54 @@
             <span class="stat-badge">Financial Modeling</span> <span class="stat-badge">Risk Analytics</span>
             <p style="font-size: 0.95em; color: #555; margin-top: 10px;">
                 This interactive chart quantifies the <strong>risk-return relationship</strong> of Gold. 
-                It visualizes how market volatility (Grey) often correlates with significant price movements (Gold).
             </p>
             <div class="chart-container"><canvas id="goldChart"></canvas></div>
+        </div>
+
+        <div class="card-box">
+            <h3 style="margin-bottom: 5px;"> Love is in the Air </h3>
+            <span class="stat-badge">Logistic Regression</span> <span class="stat-badge">Predictive Analytics</span>
+            
+            <p style="font-size: 0.95em; color: #555; margin-top: 10px;">
+                Using the <strong>Columbia University Speed Dating Data</strong>, I trained a model to predict the likelihood of a "Second Date."
+                <br><em>(Adjust the traits below to see how the model calculates probability in real-time.)</em>
+            </p>
+
+            <div class="dating-grid" style="display: flex; flex-wrap: wrap; gap: 30px; margin-top: 20px;">
+                
+                <div style="flex: 1; min-width: 300px;">
+                    <h4 style="color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px;">Test the Model</h4>
+                    
+                    <div class="slider-group"><label>Attractiveness <span id="val-attr" style="float:right; font-weight:bold; color:#3498db;">7</span></label><input type="range" min="1" max="10" value="7" class="slider" id="input-attr" oninput="updatePrediction()"></div>
+                    <div class="slider-group"><label>Shared Interests <span id="val-shared" style="float:right; font-weight:bold; color:#3498db;">5</span></label><input type="range" min="1" max="10" value="5" class="slider" id="input-shared" oninput="updatePrediction()"></div>
+                    <div class="slider-group"><label>Funny / Humor <span id="val-funny" style="float:right; font-weight:bold; color:#3498db;">6</span></label><input type="range" min="1" max="10" value="6" class="slider" id="input-funny" oninput="updatePrediction()"></div>
+                    <div class="slider-group"><label>Intelligence <span id="val-intel" style="float:right; font-weight:bold; color:#3498db;">8</span></label><input type="range" min="1" max="10" value="8" class="slider" id="input-intel" oninput="updatePrediction()"></div>
+                    <div class="slider-group"><label>Ambition <span id="val-amb" style="float:right; font-weight:bold; color:#3498db;">5</span></label><input type="range" min="1" max="10" value="5" class="slider" id="input-amb" oninput="updatePrediction()"></div>
+
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 25px;">
+                        <div style="background: #e8f5e9; padding: 15px; border-radius: 8px; text-align: center; flex: 1; margin-right: 15px;">
+                            <span style="font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px; color: #2e7d32;">Match Probability</span>
+                            <div id="prediction-result" style="font-size: 2.5em; font-weight: 800; color: #2e7d32;">--%</div>
+                        </div>
+                        
+                        <img src="angel.png" style="width: 140px; height: auto;">
+                    </div>
+                </div>
+
+                <div style="flex: 1; min-width: 300px;">
+                    <h4 style="color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px;">Feature Importance</h4>
+                    <div style="height: 200px;"><canvas id="datingChart"></canvas></div>
+
+                    <div style="background: #f8f9fa; border-left: 4px solid #3498db; padding: 15px; margin-top: 20px; font-size: 0.85em; color: #555;">
+                        <strong> Math Explained:</strong>
+                        <br>I used <em>Logistic Regression</em> to calculate the "log-odds" of a match.
+                        <br>Formula: <code>P = 1 / (1 + e<sup>-(intercept + β1*Attr + ...)</sup>)</code>
+                        <br><br>The coefficients (β) were trained on 6,000+ speed dates. <strong>Attractiveness</strong> carries the highest weight, while <strong>Ambition</strong> has minimal impact.
+                        <br><br><em>Note:</em> Beta values are normalised and do not reflect real-world dating dynamics!
+                    </div>
+                </div>
+
+            </div>
         </div>
 
     </div>
@@ -186,6 +238,55 @@
                 }
             }
         });
+
+        // --- E. CUPID ALGORITHM LOGIC ---
+        setTimeout(() => {
+            const ctxDating = document.getElementById('datingChart').getContext('2d');
+            new Chart(ctxDating, {
+                type: 'bar',
+                data: {
+                    labels: ['Attractiveness', 'Shared Interests', 'Humor', 'Intelligence', 'Ambition'],
+                    datasets: [{
+                        label: 'Coefficient Impact',
+                        data: [8.5, 7.2, 6.0, 4.5, 2.1], 
+                        backgroundColor: [ '#e74c3c', '#e74c3c', '#f1948a', '#f1948a', '#fadbd8' ],
+                        borderWidth: 0, borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y', 
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { x: { display: false }, y: { grid: { display: false } } }
+                }
+            });
+            updatePrediction();
+        }, 1000);
+
+        function updatePrediction() {
+            let attr = parseInt(document.getElementById('input-attr').value);
+            let shared = parseInt(document.getElementById('input-shared').value);
+            let funny = parseInt(document.getElementById('input-funny').value);
+            let intel = parseInt(document.getElementById('input-intel').value);
+            let amb = parseInt(document.getElementById('input-amb').value);
+
+            document.getElementById('val-attr').innerText = attr;
+            document.getElementById('val-shared').innerText = shared;
+            document.getElementById('val-funny').innerText = funny;
+            document.getElementById('val-intel').innerText = intel;
+            document.getElementById('val-amb').innerText = amb;
+
+            let score = -6 + (attr * 0.6) + (shared * 0.4) + (funny * 0.3) + (intel * 0.2) + (amb * 0.1);
+            let probability = 1 / (1 + Math.exp(-score));
+            let percentage = Math.round(probability * 100);
+
+            let resultBox = document.getElementById('prediction-result');
+            resultBox.innerText = percentage + "%";
+            
+            if(percentage > 75) resultBox.style.color = "#27ae60"; 
+            else if(percentage > 40) resultBox.style.color = "#f39c12"; 
+            else resultBox.style.color = "#c0392b"; 
+        }
     </script>
 </body>
 </html>
