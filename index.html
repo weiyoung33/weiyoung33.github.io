@@ -20,13 +20,17 @@
             transition: opacity 0.1s ease-out;
         }
 
-        .quote-img {
-            position: absolute; top: 40px; right: 60px; width: 350px; opacity: 0.9;
-            transform: rotate(5deg); box-shadow: 5px 5px 15px rgba(0,0,0,0.2); z-index: 100;
+        .profile-img {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%; /* Makes it circular */
+            object-fit: cover; /* Ensures the image covers the area */
+            border: 4px solid white; /* Adds a clean white border */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* Adds a subtle shadow */
+            margin-bottom: 20px; /* Spacing between pic and name */
         }
-        @media (max-width: 900px) { .quote-img { display: none; } }
 
-        .intro-content { max-width: 800px; min-height: 400px; }
+        .intro-content { max-width: 800px; min-height: 300px; }
         .intro-title { color: #2c3e50; font-size: 3em; margin-bottom: 20px; font-weight: 800; }
         .intro-text { color: #444; font-size: 1.25em; line-height: 1.8; margin-bottom: 25px; }
         
@@ -80,7 +84,8 @@
 <body>
 
     <div id="intro">
-        <img src="quote.png" class="quote-img">
+        <img src="profile.jpg" class="profile-img" alt="Neo Wei Young">
+
         <div class="intro-content">
             <div class="intro-title" id="type-title"></div>
             <div class="intro-text" id="type-bio"></div>
@@ -99,7 +104,7 @@
         <p style="color: #7f8c8d;">Business Analytics Undergraduate @ NUS</p>
         <hr style="border: 0; border-top: 1px solid #eee;">
 
-        <h3>🗺️ Geospatial Analysis</h3>
+        <h3> Geospatial Analysis</h3>
         <p>Explore how I apply technical skills (Python, SQL, Tableau) across global contexts.</p>
         <div style="margin-bottom: 15px;">
             <button class="nav-btn" onclick="flyTo('singapore')"> Education (Singapore)</button>
@@ -108,7 +113,7 @@
         <div id="map"></div>
         
         <div class="card-box">
-            <h3 style="margin-bottom: 5px;">📈 Gold Price vs. Volatility Risk</h3>
+            <h3 style="margin-bottom: 5px;"> Gold Price vs. Volatility Risk</h3>
             <span class="stat-badge">Financial Modeling</span> <span class="stat-badge">Risk Analytics</span>
             <p style="font-size: 0.95em; color: #555; margin-top: 10px;">
                 This interactive chart quantifies the <strong>risk-return relationship</strong> of Gold. 
@@ -117,7 +122,7 @@
         </div>
 
         <div class="card-box">
-            <h3 style="margin-bottom: 5px;"> Love is in the Air </h3>
+            <h3 style="margin-bottom: 5px;"> Love is in the Air</h3>
             <span class="stat-badge">Logistic Regression</span> <span class="stat-badge">Predictive Analytics</span>
             
             <p style="font-size: 0.95em; color: #555; margin-top: 10px;">
@@ -142,7 +147,7 @@
                             <div id="prediction-result" style="font-size: 2.5em; font-weight: 800; color: #2e7d32;">--%</div>
                         </div>
                         
-                        <img src="angel.png" style="width: 140px; height: auto;">
+                        <img src="angel.png" style="width: 140px; height: auto; ">
                     </div>
                 </div>
 
@@ -151,11 +156,11 @@
                     <div style="height: 200px;"><canvas id="datingChart"></canvas></div>
 
                     <div style="background: #f8f9fa; border-left: 4px solid #3498db; padding: 15px; margin-top: 20px; font-size: 0.85em; color: #555;">
-                        <strong> Math Explained:</strong>
+                        <strong> Logic Explained:</strong>
                         <br>I used <em>Logistic Regression</em> to calculate the "log-odds" of a match.
                         <br>Formula: <code>P = 1 / (1 + e<sup>-(intercept + β1*Attr + ...)</sup>)</code>
                         <br><br>The coefficients (β) were trained on 6,000+ speed dates. <strong>Attractiveness</strong> carries the highest weight, while <strong>Ambition</strong> has minimal impact.
-                        <br><br><em>Note:</em> Beta values are normalised and do not reflect real-world dating dynamics!
+                        <br><br><em>Do note that beta values are normalized for demonstration purposes.</em>
                     </div>
                 </div>
 
