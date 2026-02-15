@@ -120,7 +120,7 @@
                 <iframe src="literary_map.html" width="100%" height="100%" style="border: none; border-radius: 12px;"></iframe>
             </div>
 
-            <h4 style="margin-top: 40px; border-bottom: 1px solid #eee; padding-bottom: 10px;">📈 The "Hidden Gem" Finder (Rating vs. Popularity)</h4>
+            <h4 style="margin-top: 40px; border-bottom: 1px solid #eee; padding-bottom: 10px;"> The "Hidden Gem" Finder (Rating vs. Popularity)</h4>
             <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">
                 <em>Data is taken from goodreads top 100 epic fantasy books. Webscrapping of authors's origins are done via python libraries. </em>
             </p>
@@ -317,7 +317,7 @@
             document.getElementById('val-intel').innerText = intel;
             document.getElementById('val-amb').innerText = amb;
 
-            let score = -6 + (attr * 0.6) + (shared * 0.4) + (funny * 0.3) + (intel * 0.2) + (amb * 0.1);
+            let score = -6 + (attr * 0.4) + (shared * 0.3) + (funny * 0.25) + (intel * 0.2) + (amb * 0.1);
             let probability = 1 / (1 + Math.exp(-score));
             let percentage = Math.round(probability * 100);
 
