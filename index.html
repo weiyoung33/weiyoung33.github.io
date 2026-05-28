@@ -63,8 +63,8 @@
         /* --- POPUP & IMAGES --- */
         .popup-content { text-align: center; width: 300px; }
         .image-grid { display: flex; gap: 5px; margin-top: 10px; justify-content: center; }
-        .popup-img { width: 48%; height: 80px; object-fit: cover; border-radius: 5px; border: 1px solid #ddd; cursor: zoom-in; transition: transform 0.2s; }
-        .popup-img:hover { transform: scale(1.05); border-color: #3498db; }
+        .popup-img { cursor: zoom-in; transition: transform 0.2s; }
+        .popup-img:hover { transform: scale(1.02); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
         .tag { background-color: #e8f5e9; color: #2e7d32; padding: 2px 8px; border-radius: 12px; font-size: 0.8em; font-weight: bold; }
         
         .nav-btn { background-color: #3498db; color: white; border: none; padding: 10px 20px; border-radius: 20px; margin-right: 10px; cursor: pointer; font-weight: bold; transition: transform 0.2s; }
@@ -148,13 +148,42 @@
             <div id="map"></div>
         </div>
         
+        <!-- SUB CONNECT APP PROJECT (REPLACED GOLD GRAPH) -->
         <div class="card-box">
-            <h3 style="margin-bottom: 5px;"> Gold Price vs. Volatility Risk</h3>
-            <span class="stat-badge">Financial Modeling</span> <span class="stat-badge">Risk Analytics</span>
-            <p style="font-size: 0.95em; color: #555; margin-top: 10px;">
-                This interactive chart quantifies the <strong>risk-return relationship</strong> of Gold. 
+            <h3 style="margin-bottom: 5px;">SubConnect: AI Subscription Manager</h3>
+            <span class="stat-badge" style="background:#e1bee7; color:#4a148c;">Vue.js</span> 
+            <span class="stat-badge" style="background:#ffcc80; color:#e65100;">Firebase</span> 
+            <span class="stat-badge" style="background:#bbdefb; color:#0d47a1;">Gemini API</span>
+            
+            <p style="font-size: 0.95em; color: #555; margin-top: 10px; line-height: 1.6;">
+                Engineered a serverless web application with an interactive dashboard, utilizing real-time charting libraries to visualize spending trends and portfolio efficiency. 
+                <br><br>
+                <strong>AI Integration:</strong> Integrated the Gemini API to architect a savings analysis tool that cross-references user subscriptions against market benchmarks to calculate potential monthly savings. Coordinated effective communication through daily developmental sprints using Agile & Git.
             </p>
-            <div class="chart-container"><canvas id="goldChart"></canvas></div>
+
+            <div style="background: #f8f9fa; border-left: 4px solid #2ecc71; padding: 15px; margin-top: 15px; border-radius: 0 8px 8px 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                <div>
+                    <strong style="color: #2c3e50; font-size: 0.95em;">Test the Live Application</strong><br>
+                    <span style="font-size: 0.85em; color: #555;">Email: <code>testuser@test.com</code> | Password: <code>123456</code></span>
+                </div>
+                <a href="https://bt3103grp2.web.app/login" target="_blank" class="nav-btn" style="background-color: #2ecc71; text-decoration: none; display: inline-block;">Open SubConnect</a>
+            </div>
+
+            <!-- APP SCREENSHOTS (STACKED WITH DESCRIPTIONS) -->
+            <div style="margin-top: 30px;">
+                <div style="margin-bottom: 35px;">
+                    <img src="Subconnect1.png" style="width: 100%; border-radius: 8px; border: 1px solid #ddd; object-fit: cover;" alt="SubConnect Dashboard" class="popup-img">
+                    <p style="font-size: 0.95em; color: #444; margin-top: 12px; line-height: 1.5;">
+                        <strong>Dashboard View:</strong> Provides users with a comprehensive overview of their spending trends, utilizing dynamic charts to categorize expenses and highlight top subscriptions to quickly identify areas of high expenditure.
+                    </p>
+                </div>
+                <div>
+                    <img src="Subconnect2.png" style="width: 100%; border-radius: 8px; border: 1px solid #ddd; object-fit: cover;" alt="SubConnect AI Analysis" class="popup-img">
+                    <p style="font-size: 0.95em; color: #444; margin-top: 12px; line-height: 1.5;">
+                        <strong>AI Savings Analysis:</strong> Leverages the Gemini API to analyze the user's current subscription portfolio. It automatically cross-references costs against market competitors, family plans, or student tiers to generate an efficiency score and calculate exact potential savings.
+                    </p>
+                </div>
+            </div>
         </div>
 
         <div class="card-box">
@@ -183,7 +212,7 @@
                             <div id="prediction-result" style="font-size: 2.5em; font-weight: 800; color: #2e7d32;">--%</div>
                         </div>
                         
-                        <img src="angel.png" style="width: 140px; height: auto; ">
+                        <img src="angel.png" style="width: 140px; height: auto; transform: scaleX(-1);">
                     </div>
                 </div>
 
@@ -192,11 +221,11 @@
                     <div style="height: 200px;"><canvas id="datingChart"></canvas></div>
 
                     <div style="background: #f8f9fa; border-left: 4px solid #3498db; padding: 15px; margin-top: 20px; font-size: 0.85em; color: #555;">
-                        <strong> Logic Explained:</strong>
+                        <strong>🔎 Math Explained:</strong>
                         <br>I used <em>Logistic Regression</em> to calculate the "log-odds" of a match.
                         <br>Formula: <code>P = 1 / (1 + e<sup>-(intercept + β1*Attr + ...)</sup>)</code>
                         <br><br>The coefficients (β) were trained on 6,000+ speed dates. <strong>Attractiveness</strong> carries the highest weight, while <strong>Ambition</strong> has minimal impact.
-                        <br><br><em>Do note that beta values are normalized for demonstration purposes.</em>
+                        <br><br> Do note that beta values are normalized for demonstration purposes.
                     </div>
                 </div>
 
@@ -255,32 +284,7 @@
             else if (loc === 'brazil') { map.flyTo(brazilLoc, 4, { duration: 2.5 }); map.removeLayer(satelliteLayer); map.addLayer(osmLayer); setTimeout(() => brazilMarker.openPopup(), 2500); }
         }
 
-        // --- D. FINANCIAL CHART ---
-        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        const goldPrice = [1800, 1820, 1810, 1850, 1900, 1920, 1880, 1950, 2000, 2050, 2020, 2100]; 
-        const volatility = [12, 10, 15, 14, 25, 20, 15, 18, 22, 30, 18, 15]; 
-
-        const ctx = document.getElementById('goldChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'bar', 
-            data: {
-                labels: months,
-                datasets: [
-                    { label: 'Gold Price ($)', data: goldPrice, type: 'line', borderColor: '#FFD700', backgroundColor: 'rgba(255, 215, 0, 0.2)', borderWidth: 3, yAxisID: 'y', tension: 0.4 },
-                    { label: 'Volatility Risk (%)', data: volatility, type: 'bar', backgroundColor: 'rgba(128, 128, 128, 0.4)', yAxisID: 'y1' }
-                ]
-            },
-            options: {
-                responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
-                plugins: { legend: { position: 'top' }, tooltip: { enabled: true } },
-                scales: {
-                    y: { type: 'linear', display: true, position: 'left', title: { display: true, text: 'Price (USD)' } },
-                    y1: { type: 'linear', display: true, position: 'right', title: { display: true, text: 'Volatility Index' }, grid: { drawOnChartArea: false } }
-                }
-            }
-        });
-
-        // --- E. CUPID ALGORITHM LOGIC ---
+        // --- D. CUPID ALGORITHM LOGIC ---
         setTimeout(() => {
             const ctxDating = document.getElementById('datingChart').getContext('2d');
             new Chart(ctxDating, {
