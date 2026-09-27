@@ -186,6 +186,25 @@
         .semi-note { background: #f6f8fa; border-left: 4px solid #7194a5; border-radius: 0 8px 8px 0; padding: 14px 17px; color: #35505c; font-size: .88rem; line-height: 1.6; }
         .semi-sources { margin-top: 20px; padding-top: 16px; border-top: 1px solid #dfebeb; color: #567077; font-size: .82rem; line-height: 1.55; }
         .semi-sources a { color: #086b79; text-decoration: underline; text-underline-offset: 2px; }
+
+        .semi-method-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 11px; margin-top: 14px; }
+        .semi-method-step { padding: 18px; background: #f5faf9; border: 1px solid #dceaea; border-radius: 10px; }
+        .semi-method-step strong { display: block; color: #163e49; font-size: .96rem; margin: 5px 0 8px; }
+        .semi-method-step p { margin: 0; color: #48636c; font-size: .86rem; line-height: 1.57; }
+        .semi-step-num { color: #008776; font-size: .78rem; font-weight: 800; letter-spacing: .12em; }
+        .semi-table-wrap { overflow-x: auto; border: 1px solid #dceaea; border-radius: 10px; margin-top: 12px; }
+        .semi-table { width: 100%; min-width: 560px; border-collapse: collapse; text-align: left; font-size: .88rem; }
+        .semi-table caption { text-align: left; padding: 15px 18px 0; color: #49636b; font-size: .83rem; }
+        .semi-table th, .semi-table td { padding: 12px 14px; border-bottom: 1px solid #e8efef; vertical-align: top; }
+        .semi-table tr:last-child td { border-bottom: 0; }
+        .semi-table thead th { color: #48656d; background: #f4f9f9; font-weight: 750; }
+        .semi-table td:last-child, .semi-table th:last-child { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .semi-table .semi-best { background: #eaf7f3; font-weight: 750; color: #175e51; }
+        .semi-detail { margin-top: 22px; border: 1px solid #dceaea; border-radius: 10px; background: #fbfdfd; padding: 14px 17px; }
+        .semi-detail summary { color: #173e49; cursor: pointer; font-weight: 750; }
+        .semi-detail p { color: #55707a; font-size: .86rem; line-height: 1.55; }
+        .semi-key-result { background: #edf7f4; border-left: 4px solid #168a75; border-radius: 0 8px 8px 0; padding: 15px 18px; color: #204c4b; font-size: .9rem; line-height: 1.6; margin: 18px 0; }
+        @media (max-width: 670px) { .semi-method-grid { grid-template-columns: 1fr; } }
         @media (max-width: 670px) {
             .container { margin-left: 12px; margin-right: 12px; padding: 18px; }
             .semi-hero { padding: 25px 20px; }
@@ -264,43 +283,92 @@
             <div class="semi-body">
                 <div class="semi-metrics" aria-label="Key results">
                     <div class="semi-metric"><strong>88</strong><span>Wafers with matched process traces and 89-point etch measurements across 10 lots</span></div>
-                    <div class="semi-metric"><strong>0.130 µm</strong><span>Mean absolute error using wafer order and the first 120 seconds of sensors</span></div>
-                    <div class="semi-metric"><strong>9 / 10</strong><span>Held-out lots where early sensors improved on wafer order alone</span></div>
+                    <div class="semi-metric"><strong>0.130 µm</strong><span>Held-out-lot mean absolute error using the first 120 seconds of sensors</span></div>
+                    <div class="semi-metric"><strong>9 / 10</strong><span>Lots where early sensors beat a model using wafer order alone</span></div>
                 </div>
-                <h3 class="semi-section-title">How much do early signals add?</h3>
-                <p class="semi-muted">Each score comes from holding out one entire lot at a time. Lower mean absolute error (MAE) means more accurate predictions of final wafer-average etch depth.</p>
+
+                <h3 class="semi-section-title">The question</h3>
+                <p class="semi-muted">Physical wafer measurements arrive after processing. I tested whether in-situ process readings from the start of a wafer's etch could estimate its eventual mean silicon etch depth. The sensor traces record <em>wafer processing after conditioning</em>, so this analysis predicts a wafer outcome rather than the conditioning completion time.</p>
+
+                <h3 class="semi-section-title">Methodology</h3>
+                <div class="semi-method-grid">
+                    <div class="semi-method-step"><span class="semi-step-num">01 · LABELS</span><strong>One target per wafer</strong><p>I averaged the 89 published silicon etch measurements on each wafer. Joining these measurements with process records yielded 88 labeled wafer runs from 10 lots.</p></div>
+                    <div class="semi-method-step"><span class="semi-step-num">02 · TIME WINDOWS</span><strong>Only signals available by prediction time</strong><p>I isolated the active etch from RF power, then summarized five sensor families within the first 120 seconds, first 300 seconds, or full roughly 598-second etch.</p></div>
+                    <div class="semi-method-step"><span class="semi-step-num">03 · FEATURES &amp; MODELS</span><strong>Compare context with sensors</strong><p>For pressure, Gas5 flow, platen Vpp, source reflected power, and helium pressure, I calculated mean, variability, and late-minus-early change. Ridge regression (α = 10) used median imputation and scaling.</p></div>
+                    <div class="semi-method-step"><span class="semi-step-num">04 · VALIDATION</span><strong>Test on a different lot</strong><p>I held out one entire lot, trained on the other nine, and repeated this for all 10 lots. Imputation and scaling were fit on training data inside each fold. I compared errors in µm against simple baselines.</p></div>
+                </div>
+
+                <h3 class="semi-section-title">Full-run model comparison</h3>
+                <p class="semi-muted">All four models below predict the same wafer-average outcome for the same 88 labeled wafers. Sensor models in this table use the <strong>completed etch trace</strong>. Mean absolute error (MAE) is pooled across held-out wafer predictions; lower is better.</p>
+                <div class="semi-table-wrap">
+                    <table class="semi-table">
+                        <caption>Leave-one-lot-out results using the full process trace</caption>
+                        <thead><tr><th scope="col">Model</th><th scope="col">Inputs</th><th scope="col">MAE (µm)</th></tr></thead>
+                        <tbody>
+                            <tr><td>Training mean</td><td>Average measured depth from training lots</td><td>0.348</td></tr>
+                            <tr><td>Wafer order</td><td>Position of the wafer within its lot</td><td>0.190</td></tr>
+                            <tr><td>Sensors only</td><td>Full-run process-signal summaries</td><td>0.156</td></tr>
+                            <tr class="semi-best"><td>Wafer order + sensors</td><td>Both sources of information</td><td>0.127</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="semi-key-result">Combining wafer order and sensor behavior improved prediction over either source alone. The full-run comparison establishes the value of process signals; the next analysis asks how early those signals become useful.</div>
+
+                <h3 class="semi-section-title">How early can the estimate be made?</h3>
+                <p class="semi-muted">I repeated the order-plus-sensors model with progressively longer windows from the start of the active etch. These are retrospective predictions of the final wafer measurement, evaluated by holding out whole lots.</p>
                 <div class="semi-chart" role="img" aria-label="Mean absolute error in micrometres: wafer order only 0.190; wafer order with first 120 seconds of sensors 0.130; wafer order with full etch sensors 0.127. Lower is better.">
                     <div class="semi-bar-row"><span class="semi-bar-label">Wafer order only</span><div class="semi-bar-track"><span class="semi-bar semi-bar-order"></span></div><span class="semi-bar-value">0.190</span></div>
                     <div class="semi-bar-row"><span class="semi-bar-label">Order + first 120 s</span><div class="semi-bar-track"><span class="semi-bar semi-bar-early"></span></div><span class="semi-bar-value">0.130</span></div>
                     <div class="semi-bar-row"><span class="semi-bar-label">Order + full etch</span><div class="semi-bar-track"><span class="semi-bar semi-bar-full"></span></div><span class="semi-bar-value">0.127</span></div>
                 </div>
-                <p class="semi-muted" style="margin-top:12px;">The early model reduced pooled MAE by about 32% relative to wafer order alone. Its error was 0.003 µm higher than the full-trace model on these same lots.</p>
-                <div class="semi-pair">
-                    <div>
-                        <h3 class="semi-section-title">What I built</h3>
-                        <ol class="semi-steps">
-                            <li>Joined in-situ process logs to later wafer measurements; kept one labeled observation per wafer.</li>
-                            <li>Extracted early features from pressure, gas flow, RF reflected power, platen voltage, and helium pressure.</li>
-                            <li>Trained Ridge models with imputation and scaling inside each training fold; tested on a different lot each time.</li>
-                        </ol>
-                    </div>
-                    <div>
-                        <h3 class="semi-section-title">Does it hold across lots?</h3>
-                        <p class="semi-muted">Early sensor features helped on nine of ten held-out lots. Lot 2 was the exception; it performed worse than wafer order alone.</p>
-                        <div class="semi-lot-list" role="img" aria-label="Early sensors improve mean absolute error for lots 1 and 3 through 10; lot 2 gets worse.">
-                            <span>Lot 1 ✓</span><span class="semi-exception">Lot 2 ✕</span><span>Lot 3 ✓</span><span>Lot 4 ✓</span><span>Lot 5 ✓</span>
-                            <span>Lot 6 ✓</span><span>Lot 7 ✓</span><span>Lot 8 ✓</span><span>Lot 9 ✓</span><span>Lot 10 ✓</span>
-                        </div>
-                    </div>
+                <div class="semi-table-wrap">
+                    <table class="semi-table">
+                        <caption>Wafer order + sensors, evaluated at each sensor horizon</caption>
+                        <thead><tr><th scope="col">Sensor data available</th><th scope="col">Approximate portion of etch</th><th scope="col">MAE (µm)</th></tr></thead>
+                        <tbody>
+                            <tr class="semi-best"><td>First 120 seconds</td><td>20%</td><td>0.130</td></tr>
+                            <tr><td>First 300 seconds</td><td>50%</td><td>0.134</td></tr>
+                            <tr><td>Full etch</td><td>100%</td><td>0.127</td></tr>
+                        </tbody>
+                    </table>
                 </div>
-                <h3 class="semi-section-title">What this result means</h3>
-                <div class="semi-note">This is an <strong>early estimate of the final wafer-average measurement</strong>, evaluated retrospectively on ten lots. It does not show that conditioning is complete, establish a safe etch stopping point, or demonstrate time or material savings. The 120-second window and feature choices were explored on these same lots, so performance needs checking on genuinely new lots.</div>
+                <p class="semi-muted" style="margin-top:12px;">The first 120 seconds lowered pooled MAE by about 32% versus wafer order alone and came within 0.003 µm of the full-trace result. The 300-second score was slightly worse than both; more readings did not reliably lower held-out error in this small dataset.</p>
+
+                <h3 class="semi-section-title">Check across lots</h3>
+                <p class="semi-muted">The early sensor model improved on wafer order for nine held-out lots. Lot 2 was the exception: its MAE rose from 0.186 to 0.212 µm. This lot-level view prevents the pooled score from hiding a weaker case.</p>
+                <div class="semi-lot-list" role="img" aria-label="Early sensors improve mean absolute error for lots 1 and 3 through 10; lot 2 gets worse.">
+                    <span>Lot 1 ✓</span><span class="semi-exception">Lot 2 ✕</span><span>Lot 3 ✓</span><span>Lot 4 ✓</span><span>Lot 5 ✓</span>
+                    <span>Lot 6 ✓</span><span>Lot 7 ✓</span><span>Lot 8 ✓</span><span>Lot 9 ✓</span><span>Lot 10 ✓</span>
+                </div>
+
+                <details class="semi-detail">
+                    <summary>Which sensor families helped the full-run model?</summary>
+                    <p>I removed one sensor family at a time from the wafer-order-plus-sensors model and recalculated pooled MAE. A larger rise means the family carried more predictive information in this setup.</p>
+                    <div class="semi-table-wrap">
+                        <table class="semi-table">
+                            <caption>Full-run sensor-family ablation</caption>
+                            <thead><tr><th scope="col">Feature set</th><th scope="col">MAE (µm)</th></tr></thead>
+                            <tbody>
+                                <tr class="semi-best"><td>All five sensor families</td><td>0.127</td></tr>
+                                <tr><td>Without source reflected power</td><td>0.148</td></tr>
+                                <tr><td>Without helium pressure</td><td>0.139</td></tr>
+                                <tr><td>Without pressure</td><td>0.135</td></tr>
+                                <tr><td>Without Gas5 flow</td><td>0.135</td></tr>
+                                <tr><td>Without platen Vpp</td><td>0.127</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p>These are predictive associations. Removing a feature from a model does not show what would happen if a machine setting were changed.</p>
+                </details>
+
+                <h3 class="semi-section-title">Scope of the result</h3>
+                <div class="semi-note">This analysis estimates the <strong>final wafer-average etch depth</strong> before the etch finishes. It does not establish conditioning completion, safe early stopping, or saved time and material. Only 10 lots from one dataset were available, and the sensor choices and 120-second horizon were explored using these same lots. A new set of lots is needed to test the selected approach independently.</div>
                 <div class="semi-sources">
                     Data: <a href="https://doi.org/10.5281/zenodo.17122442" target="_blank" rel="noopener noreferrer">Sayyed et al., BOSCH plasma-etching dataset</a>.
-                    Related work has also predicted etch depth from these process signals, including
+                    Related work has predicted etch depth from process signals, including
                     <a href="https://doi.org/10.60687/2025-0128" target="_blank" rel="noopener noreferrer">Gaussian-process virtual metrology</a> and a
                     <a href="https://github.com/cpngfan-ui/bosch-etch-virtual-metrology" target="_blank" rel="noopener noreferrer">full-run wafer-mean benchmark</a>.
-                    This project examines how early a useful wafer-mean prediction can be made.
+                    This project examines prediction using short early sensor windows.
                 </div>
             </div>
         </section>
