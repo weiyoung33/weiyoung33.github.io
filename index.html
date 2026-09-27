@@ -1,234 +1,578 @@
 <!DOCTYPE html>
+
 <html>
+
 <head>
-    <title>Neo Wei Young | Data Analyst</title>
-    
+
+    <title>Neo Wei Young | Data Science & Semiconductor Analytics</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Neo Wei Young’s data science portfolio, including early virtual metrology for semiconductor plasma etching.">
+
+
+
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
+
+
     <style>
+
         /* --- GLOBAL STYLES --- */
+
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; overflow-x: hidden; }
-        
+
+
+
         /* --- INTRO SECTION --- */
+
         #intro {
+
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+
             background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+
             display: flex; flex-direction: column; justify-content: center; align-items: center;
+
             z-index: 50; padding: 40px; box-sizing: border-box; text-align: center;
+
             transition: opacity 0.1s ease-out;
+
         }
+
+
 
         .profile-img {
+
             width: 180px;
+
             height: 180px;
+
             border-radius: 50%; /* Makes it circular */
+
             object-fit: cover; /* Ensures the image covers the area */
+
             border: 4px solid white; /* Adds a clean white border */
+
             box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* Adds a subtle shadow */
+
             margin-bottom: 20px; /* Spacing between pic and name */
+
         }
+
+
 
         .intro-content { max-width: 800px; min-height: 300px; }
+
         .intro-title { color: #2c3e50; font-size: 3em; margin-bottom: 20px; font-weight: 800; }
+
         .intro-text { color: #444; font-size: 1.25em; line-height: 1.8; margin-bottom: 25px; }
-        
+
+
+
         /* Typewriter Cursor */
+
         .cursor { display: inline-block; width: 3px; background-color: #333; animation: blink 1s infinite; margin-left: 5px; }
+
         @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 1; } }
+
         .fade-in-wait { opacity: 0; transition: opacity 1.5s ease-in; }
+
         .visible { opacity: 1; }
 
+
+
         .hobby-text {
+
             color: #555; font-size: 1.1em; font-style: italic; margin-top: 30px;
+
             border-top: 1px solid #ccc; padding-top: 20px; display: inline-block; max-width: 600px;
+
         }
+
         .scroll-hint { margin-top: 50px; color: #888; font-weight: bold; animation: bounce 2s infinite; }
+
         @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-10px);} 60% {transform: translateY(-5px);} }
 
+
+
         /* --- MAIN CONTAINER --- */
+
         .container {
+
             position: relative; z-index: 10; max-width: 900px; margin: 100vh auto 40px auto;
+
             background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+
         }
 
+
+
         #map { height: 450px; width: 100%; border-radius: 12px; border: 2px solid #e0e0e0; margin-top: 20px; }
-        
+
+
+
         /* Cards & Charts */
+
         .card-box { margin-top: 40px; padding: 25px; background: #fff; border: 1px solid #e0e0e0; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+
         .chart-container { position: relative; height: 350px; width: 100%; margin-top: 20px; }
+
         .stat-badge { background: #fff3cd; color: #856404; padding: 5px 10px; border-radius: 5px; font-size: 0.85em; font-weight: bold; display: inline-block; margin-bottom: 10px; margin-right: 5px; }
 
+
+
         /* --- POPUP & IMAGES --- */
+
         .popup-content { text-align: center; width: 300px; }
+
         .image-grid { display: flex; gap: 5px; margin-top: 10px; justify-content: center; }
+
         .popup-img { width: 48%; height: 80px; object-fit: cover; border-radius: 5px; border: 1px solid #ddd; cursor: zoom-in; transition: transform 0.2s; }
+
         .popup-img:hover { transform: scale(1.05); border-color: #3498db; }
+
         .tag { background-color: #e8f5e9; color: #2e7d32; padding: 2px 8px; border-radius: 12px; font-size: 0.8em; font-weight: bold; }
-        
+
+
+
         .nav-btn { background-color: #3498db; color: white; border: none; padding: 10px 20px; border-radius: 20px; margin-right: 10px; cursor: pointer; font-weight: bold; transition: transform 0.2s; }
+
         .nav-btn:hover { transform: scale(1.05); background-color: #2980b9; }
+
         .modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); justify-content: center; align-items: center; cursor: zoom-out; }
+
         .modal-content { max-width: 90%; max-height: 90%; border-radius: 5px; animation: zoom 0.3s; }
+
         @keyframes zoom { from {transform:scale(0)} to {transform:scale(1)} }
+
+
+        /* Semiconductor project: all charts and visuals are native HTML/CSS. */
+        .semi-project { border: 1px solid #cadfe1; padding: 0; overflow: hidden; background: #fcfefe; }
+        .semi-project * { box-sizing: border-box; }
+        .semi-hero { padding: 34px; color: #f7feff; background: linear-gradient(130deg,#102c42,#0d4855); }
+        .semi-kicker { color: #79e1d1; font-size: .77rem; font-weight: 800; text-transform: uppercase; letter-spacing: .15em; }
+        .semi-hero h2 { color: white; margin: 10px 0 13px; max-width: 650px; font-size: clamp(1.65rem, 4vw, 2.35rem); line-height: 1.18; }
+        .semi-hero p { color: #d4e7eb; line-height: 1.65; max-width: 690px; margin: 0; }
+        .semi-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 21px; }
+        .semi-tags span { border: 1px solid #65b1b5; background: #ffffff13; border-radius: 30px; padding: 6px 10px; font-size: .81rem; }
+        .semi-progress { margin-top: 29px; max-width: 620px; }
+        .semi-progress-label { display: flex; justify-content: space-between; gap: 12px; font-size: .84rem; color: #d7eeef; }
+        .semi-progress-track { height: 11px; background: #ffffff35; border-radius: 20px; margin-top: 9px; overflow: hidden; }
+        .semi-progress-fill { height: 100%; width: 20.1%; border-radius: 20px; background: #68ddbb; }
+        .semi-progress small { color: #c9dbdf; display: block; margin-top: 9px; }
+        .semi-body { padding: 28px 34px 34px; }
+        .semi-metrics { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+        .semi-metric { padding: 18px; background: #f1f8f8; border: 1px solid #d9e9e9; border-radius: 10px; }
+        .semi-metric strong { display: block; color: #0b4d56; font-size: 1.75rem; line-height: 1.2; font-variant-numeric: tabular-nums; }
+        .semi-metric span { display: block; margin-top: 6px; color: #48626a; font-size: .84rem; line-height: 1.4; }
+        .semi-section-title { margin: 29px 0 10px; color: #173c48; font-size: 1.14rem; }
+        .semi-muted { color: #55707a; font-size: .89rem; line-height: 1.6; margin: 0 0 17px; }
+        .semi-chart { padding: 20px; border: 1px solid #d9e9e9; border-radius: 10px; background: white; }
+        .semi-bar-row { display: grid; grid-template-columns: minmax(120px,210px) minmax(100px,1fr) 65px; align-items: center; gap: 13px; margin: 13px 0; color: #284b54; font-size: .88rem; }
+        .semi-bar-label { line-height: 1.35; }
+        .semi-bar-track { height: 17px; background: #ecf2f3; border-radius: 20px; overflow: hidden; }
+        .semi-bar { display: block; height: 100%; border-radius: 20px; }
+        .semi-bar-order { width: 95%; background: #9cacb3; }
+        .semi-bar-early { width: 65%; background: #109483; }
+        .semi-bar-full { width: 63.5%; background: #397aa1; }
+        .semi-bar-value { font-weight: 750; font-variant-numeric: tabular-nums; text-align: right; }
+        .semi-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .semi-lot-list { display: grid; grid-template-columns: repeat(5,1fr); gap: 7px; margin-top: 12px; }
+        .semi-lot-list span { border-radius: 6px; background: #ddf4ea; color: #17604a; padding: 8px 3px; text-align: center; font-size: .78rem; font-weight: 700; }
+        .semi-lot-list .semi-exception { color: #805715; background: #fff1d7; }
+        .semi-steps { margin: 10px 0 0; padding-left: 20px; color: #365660; font-size: .9rem; line-height: 1.65; }
+        .semi-steps li { padding-left: 3px; margin-bottom: 8px; }
+        .semi-note { background: #f6f8fa; border-left: 4px solid #7194a5; border-radius: 0 8px 8px 0; padding: 14px 17px; color: #35505c; font-size: .88rem; line-height: 1.6; }
+        .semi-sources { margin-top: 20px; padding-top: 16px; border-top: 1px solid #dfebeb; color: #567077; font-size: .82rem; line-height: 1.55; }
+        .semi-sources a { color: #086b79; text-decoration: underline; text-underline-offset: 2px; }
+        @media (max-width: 670px) {
+            .container { margin-left: 12px; margin-right: 12px; padding: 18px; }
+            .semi-hero { padding: 25px 20px; }
+            .semi-body { padding: 21px 19px 25px; }
+            .semi-metrics { grid-template-columns: 1fr; }
+            .semi-pair { grid-template-columns: 1fr; gap: 4px; }
+            .semi-bar-row { grid-template-columns: 1fr 54px; gap: 6px 9px; }
+            .semi-bar-label { grid-column: 1 / -1; }
+            .semi-lot-list { grid-template-columns: repeat(5,1fr); }
+        }
     </style>
+
 </head>
+
 <body>
 
+
+
     <div id="intro">
+
         <img src="profile.jpg" class="profile-img" alt="Neo Wei Young">
 
+
+
         <div class="intro-content">
+
             <div class="intro-title" id="type-title"></div>
+
             <div class="intro-text" id="type-bio"></div>
+
             <div id="delayed-content" class="fade-in-wait">
+
                 <p class="intro-text">Naturally curious and analytical, I love breaking down problems and uncovering actionable insights to drive meaningful decisions.</p>
+
                 <div class="hobby-text">"In my downtime, I enjoy immersing myself in a good book... Reading fuels my creativity, inspiring me to approach challenges with both empathy and innovation."</div>
+
                 <div class="scroll-hint">Scroll down to see my work<br>⬇</div>
+
             </div>
+
         </div>
+
     </div>
+
+
 
     <div id="imageModal" class="modal" onclick="closeModal()"><img class="modal-content" id="fullImage"></div>
 
+
+
     <div class="container">
-        <h1>My Data Journey</h1>
+
+        <h1>Data Science &amp; Semiconductor Analytics</h1>
+
         <p style="color: #7f8c8d;">Business Analytics Undergraduate @ NUS</p>
+
         <hr style="border: 0; border-top: 1px solid #eee;">
 
+
+
+
+        <section class="card-box semi-project" id="semiconductor-project" aria-labelledby="semi-title">
+            <header class="semi-hero">
+                <div class="semi-kicker">Featured project · Semiconductor data science</div>
+                <h2 id="semi-title">Early Virtual Metrology for Plasma Etching</h2>
+                <p>Can machine signals tell us how deeply a wafer will be etched before its process run finishes? I built a model that estimates the final wafer-average silicon etch depth using only sensor readings from the first two minutes of a roughly ten-minute Bosch etch.</p>
+                <div class="semi-tags" aria-label="Project tools and methods">
+                    <span>Python · Pandas</span><span>Time-series features</span><span>Ridge regression</span><span>Lot-held-out validation</span>
+                </div>
+                <div class="semi-progress" aria-label="120 seconds of sensor data used from an approximately 598-second etch">
+                    <div class="semi-progress-label"><span>Sensor window observed: 120 s</span><span>Typical etch: ~598 s</span></div>
+                    <div class="semi-progress-track"><div class="semi-progress-fill"></div></div>
+                    <small>The prediction is made after roughly 20% of the recorded etch; the wafer continues processing normally.</small>
+                </div>
+            </header>
+            <div class="semi-body">
+                <div class="semi-metrics" aria-label="Key results">
+                    <div class="semi-metric"><strong>88</strong><span>Wafers with matched process traces and 89-point etch measurements across 10 lots</span></div>
+                    <div class="semi-metric"><strong>0.130 µm</strong><span>Mean absolute error using wafer order and the first 120 seconds of sensors</span></div>
+                    <div class="semi-metric"><strong>9 / 10</strong><span>Held-out lots where early sensors improved on wafer order alone</span></div>
+                </div>
+                <h3 class="semi-section-title">How much do early signals add?</h3>
+                <p class="semi-muted">Each score comes from holding out one entire lot at a time. Lower mean absolute error (MAE) means more accurate predictions of final wafer-average etch depth.</p>
+                <div class="semi-chart" role="img" aria-label="Mean absolute error in micrometres: wafer order only 0.190; wafer order with first 120 seconds of sensors 0.130; wafer order with full etch sensors 0.127. Lower is better.">
+                    <div class="semi-bar-row"><span class="semi-bar-label">Wafer order only</span><div class="semi-bar-track"><span class="semi-bar semi-bar-order"></span></div><span class="semi-bar-value">0.190</span></div>
+                    <div class="semi-bar-row"><span class="semi-bar-label">Order + first 120 s</span><div class="semi-bar-track"><span class="semi-bar semi-bar-early"></span></div><span class="semi-bar-value">0.130</span></div>
+                    <div class="semi-bar-row"><span class="semi-bar-label">Order + full etch</span><div class="semi-bar-track"><span class="semi-bar semi-bar-full"></span></div><span class="semi-bar-value">0.127</span></div>
+                </div>
+                <p class="semi-muted" style="margin-top:12px;">The early model reduced pooled MAE by about 32% relative to wafer order alone. Its error was 0.003 µm higher than the full-trace model on these same lots.</p>
+                <div class="semi-pair">
+                    <div>
+                        <h3 class="semi-section-title">What I built</h3>
+                        <ol class="semi-steps">
+                            <li>Joined in-situ process logs to later wafer measurements; kept one labeled observation per wafer.</li>
+                            <li>Extracted early features from pressure, gas flow, RF reflected power, platen voltage, and helium pressure.</li>
+                            <li>Trained Ridge models with imputation and scaling inside each training fold; tested on a different lot each time.</li>
+                        </ol>
+                    </div>
+                    <div>
+                        <h3 class="semi-section-title">Does it hold across lots?</h3>
+                        <p class="semi-muted">Early sensor features helped on nine of ten held-out lots. Lot 2 was the exception; it performed worse than wafer order alone.</p>
+                        <div class="semi-lot-list" role="img" aria-label="Early sensors improve mean absolute error for lots 1 and 3 through 10; lot 2 gets worse.">
+                            <span>Lot 1 ✓</span><span class="semi-exception">Lot 2 ✕</span><span>Lot 3 ✓</span><span>Lot 4 ✓</span><span>Lot 5 ✓</span>
+                            <span>Lot 6 ✓</span><span>Lot 7 ✓</span><span>Lot 8 ✓</span><span>Lot 9 ✓</span><span>Lot 10 ✓</span>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="semi-section-title">What this result means</h3>
+                <div class="semi-note">This is an <strong>early estimate of the final wafer-average measurement</strong>, evaluated retrospectively on ten lots. It does not show that conditioning is complete, establish a safe etch stopping point, or demonstrate time or material savings. The 120-second window and feature choices were explored on these same lots, so performance needs checking on genuinely new lots.</div>
+                <div class="semi-sources">
+                    Data: <a href="https://doi.org/10.5281/zenodo.17122442" target="_blank" rel="noopener noreferrer">Sayyed et al., BOSCH plasma-etching dataset</a>.
+                    Related work has also predicted etch depth from these process signals, including
+                    <a href="https://doi.org/10.60687/2025-0128" target="_blank" rel="noopener noreferrer">Gaussian-process virtual metrology</a> and a
+                    <a href="https://github.com/cpngfan-ui/bosch-etch-virtual-metrology" target="_blank" rel="noopener noreferrer">full-run wafer-mean benchmark</a>.
+                    This project examines how early a useful wafer-mean prediction can be made.
+                </div>
+            </div>
+        </section>
+
         <div class="card-box" style="border-left: 5px solid #8e44ad;">
+
             <h3 style="margin-bottom: 5px; color: #2c3e50;">Project Spotlight: Literary Analytics</h3>
+
             <span class="stat-badge" style="background: #f3e5f5; color: #8e44ad;">Python (Pandas)</span>
+
             <span class="stat-badge" style="background: #f3e5f5; color: #8e44ad;">Web Scraping</span>
+
             <span class="stat-badge" style="background: #f3e5f5; color: #8e44ad;">Plotly</span>
 
+
+
             <p style="font-size: 0.95em; color: #555; margin-top: 10px;">
+
                 I built cool Geospatial visualisation  to analyze top fantasy books on Goodreads. 
+
                 To find Hidden Gems- books with high ratings but low popularity-and visualize the global distribution of fantasy authors.
+
             </p>
+
+
 
             <h4 style="margin-top: 30px; border-bottom: 1px solid #eee; padding-bottom: 10px;"> Geographical Origin of Fantasy Authors</h4>
+
             <div class="chart-container" style="height: 500px;">
+
                 <iframe src="literary_map.html" width="100%" height="100%" style="border: none; border-radius: 12px;"></iframe>
+
             </div>
+
+
 
             <h4 style="margin-top: 40px; border-bottom: 1px solid #eee; padding-bottom: 10px;"> The "Hidden Gem" Finder (Rating vs. Popularity)</h4>
+
             <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">
+
                 <em>Data is taken from goodreads top 100 epic fantasy books. Webscrapping of authors's origins and genres are done via python libraries. </em>
+
             </p>
+
             <div class="chart-container" style="height: 600px;">
+
                 <iframe src="goodreads_interactive_scatter.html" width="100%" height="100%" style="border: none; border-radius: 12px;"></iframe>
+
             </div>
+
+
 
             <h4 style="margin-top: 40px; border-bottom: 1px solid #eee; padding-bottom: 10px;"> My Personal Reading Constellation</h4>
+
             <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">
+
                 <em>This interactive network is taken from my Goodreads account. Select a Genre from the top-left menu to see which authors I read the most.</em>
+
             </p>
+
             <div class="chart-container" style="height: 700px;">
+
                 <iframe src="literary_network.html" width="100%" height="100%" style="border: none; border-radius: 12px;"></iframe>
+
             </div>
+
+
 
         </div>
 
+
+
         <div class="card-box">
+
             <h3> Geospatial Analysis</h3>
+
             <p>Explore how I apply technical skills (Python, SQL, Tableau) across global contexts.</p>
+
             <div style="margin-bottom: 15px;">
+
                 <button class="nav-btn" onclick="flyTo('singapore')"> Education (Singapore)</button>
+
                 <button class="nav-btn" onclick="flyTo('brazil')"> Market Analysis (Brazil)</button>
+
             </div>
+
             <div id="map"></div>
+
         </div>
-        
+
+
+
         <!-- SUB CONNECT APP PROJECT -->
+
         <div class="card-box">
+
             <h3 style="margin-bottom: 5px;">SubConnect: AI Subscription Manager</h3>
+
             <span class="stat-badge" style="background:#e1bee7; color:#4a148c;">Vue.js</span> 
+
             <span class="stat-badge" style="background:#ffcc80; color:#e65100;">Firebase</span> 
+
             <span class="stat-badge" style="background:#bbdefb; color:#0d47a1;">Gemini API</span>
-            
+
+
+
             <p style="font-size: 0.95em; color: #555; margin-top: 10px; line-height: 1.6;">
+
                 Engineered a serverless web application with an interactive dashboard, utilizing real-time charting libraries to visualize spending trends and portfolio efficiency. 
+
                 <br><br>
+
                 <strong>AI Integration:</strong> Integrated the Gemini API to architect a savings analysis tool that cross-references user subscriptions against market benchmarks to calculate potential monthly savings. Coordinated effective communication through daily developmental sprints using Agile & Git.
+
             </p>
+
+
 
             <div style="background: #f8f9fa; border-left: 4px solid #2ecc71; padding: 15px; margin-top: 15px; border-radius: 0 8px 8px 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+
                 <div>
+
                     <strong style="color: #2c3e50; font-size: 0.95em;">Test the Live Application</strong><br>
+
                     <span style="font-size: 0.85em; color: #555;">Email: <code>testuser@test.com</code> | Password: <code>123456</code></span>
+
                 </div>
+
                 <a href="https://bt3103grp2.web.app/login" target="_blank" class="nav-btn" style="background-color: #2ecc71; text-decoration: none; display: inline-block;">Open SubConnect</a>
+
             </div>
 
+
+
             <!-- APP SCREENSHOTS (STACKED WITH DESCRIPTIONS) -->
+
             <div style="margin-top: 30px;">
+
                 <div style="margin-bottom: 35px;">
+
                     <img src="Subconnect1.png" style="width: 100%; border-radius: 8px; border: 1px solid #ddd; object-fit: cover;" alt="SubConnect Dashboard" class="popup-img">
+
                     <p style="font-size: 0.95em; color: #444; margin-top: 12px; line-height: 1.5;">
+
                         <strong>Dashboard View:</strong> Provides users with a comprehensive overview of their spending trends, utilizing dynamic charts to categorize expenses and highlight top subscriptions to quickly identify areas of high expenditure.
+
                     </p>
+
                 </div>
+
                 <div>
+
                     <img src="Subconnect2.png" style="width: 100%; border-radius: 8px; border: 1px solid #ddd; object-fit: cover;" alt="SubConnect AI Analysis" class="popup-img">
+
                     <p style="font-size: 0.95em; color: #444; margin-top: 12px; line-height: 1.5;">
+
                         <strong>AI Savings Analysis:</strong> Leverages the Gemini API to analyze the user's current subscription portfolio. It automatically cross-references costs against market competitors, family plans, or student tiers to generate an efficiency score and calculate exact potential savings.
+
                     </p>
+
                 </div>
+
             </div>
+
         </div>
+
+
 
     </div>
 
+
+
     <script>
+
         // --- A. TYPEWRITER ---
+
         const titleText = "Hi, I'm Neo Wei Young.";
-        const bioText = "As an aspiring Business Analytics professional, I thrive on solving complex challenges by combining data-driven insights with creative problem-solving.";
+
+        const bioText = "I turn complex data into clear decisions, with a growing focus on semiconductor process analytics and machine learning.";
+
         const titleElement = document.getElementById("type-title");
+
         const bioElement = document.getElementById("type-bio");
+
         const delayedContent = document.getElementById("delayed-content");
+
         let i = 0, j = 0;
 
+
+
         function typeTitle() {
+
             if (i < titleText.length) { titleElement.innerHTML += titleText.charAt(i); i++; setTimeout(typeTitle, 50); } 
+
             else { titleElement.innerHTML += '<span class="cursor">|</span>'; setTimeout(() => { titleElement.innerHTML = titleText; typeBio(); }, 800); }
+
         }
+
         function typeBio() {
+
             if (j === 0) bioElement.innerHTML = '<span class="cursor">|</span>';
+
             if (j < bioText.length) { bioElement.innerHTML = bioText.substring(0, j + 1) + '<span class="cursor">|</span>'; j++; setTimeout(typeBio, 30); } 
+
             else { setTimeout(() => { delayedContent.classList.add("visible"); }, 500); }
+
         }
+
         window.onload = function() { setTimeout(typeTitle, 500); };
 
+
+
         // --- B. SCROLL FADE ---
+
         window.addEventListener('scroll', function() {
+
             var intro = document.getElementById('intro');
+
             var opacity = 1 - (window.scrollY / (window.innerHeight * 0.5));
+
             intro.style.opacity = (opacity >= 0) ? opacity : 0;
+
             intro.style.pointerEvents = (opacity >= 0) ? 'auto' : 'none';
+
         });
 
+
+
         // --- C. MAP SETUP ---
+
         var osmLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' });
+
         var satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19, attribution: '© Esri' });
+
         var map = L.map('map', { center: [20, 0], zoom: 2, layers: [osmLayer] });
+
         L.control.layers({ "Standard Map": osmLayer, "Satellite View": satelliteLayer }).addTo(map);
 
+
+
         document.addEventListener('click', function(e) { if (e.target && e.target.classList.contains('popup-img')) { document.getElementById("imageModal").style.display = "flex"; document.getElementById("fullImage").src = e.target.src; } });
+
         function closeModal() { document.getElementById("imageModal").style.display = "none"; }
 
+
+
         var nusLoc = [1.2944, 103.7744];
+
         var nusMarker = L.marker(nusLoc).addTo(map);
+
         nusMarker.bindPopup(`<div class="popup-content"><strong>NUS School of Computing</strong><br><span class="tag">COM3 Building</span><p style="font-size:0.9em; margin:10px 0;">Where I build my full-stack projects.</p><a href="https://www.google.com/maps/search/?api=1&query=NUS+COM3" target="_blank" style="color:#3498db; text-decoration:none;">➡️ Open in Google Maps</a></div>`);
 
+
+
         var brazilLoc = [-14.2350, -51.9253];
+
         var brazilMarker = L.marker(brazilLoc).addTo(map);
+
         brazilMarker.bindPopup(`<div class="popup-content"><strong>Brazil Consumer Analysis</strong><br><span class="tag">Python & Tableau</span><div class="image-grid"><img src="brazil_chart1.png" class="popup-img"><img src="brazil_chart2.png" class="popup-img"></div><p style="font-size:0.9em; margin:10px 0;">Applied <em>K-Means Clustering</em> to optimize locations.</p></div>`);
 
+
+
         function flyTo(loc) {
+
             if (loc === 'singapore') { map.flyTo(nusLoc, 18, { duration: 2.5 }); map.removeLayer(osmLayer); map.addLayer(satelliteLayer); setTimeout(() => nusMarker.openPopup(), 2500); }
+
             else if (loc === 'brazil') { map.flyTo(brazilLoc, 4, { duration: 2.5 }); map.removeLayer(satelliteLayer); map.addLayer(osmLayer); setTimeout(() => brazilMarker.openPopup(), 2500); }
+
         }
+
     </script>
+
 </body>
+
 </html>
