@@ -272,7 +272,7 @@
                 <h2 id="semi-title">Early Virtual Metrology for Plasma Etching</h2>
                 <p>Can machine signals tell us how deeply a wafer will be etched before its process run finishes? I built a model that estimates the final wafer-average silicon etch depth using only sensor readings from the first two minutes of a roughly ten-minute Bosch etch.</p>
                 <div class="semi-tags" aria-label="Project tools and methods">
-                    <span>Python · Pandas</span><span>Time-series features</span><span>Ridge regression</span><span>Lot-held-out validation</span>
+                    <span>Python · Pandas</span><span>Time-series feature engineering</span><span>Ridge regression (L2)</span><span>Grouped cross-validation</span><span>Feature ablation</span>
                 </div>
                 <div class="semi-progress" aria-label="120 seconds of sensor data used from an approximately 598-second etch">
                     <div class="semi-progress-label"><span>Sensor window observed: 120 s</span><span>Typical etch: ~598 s</span></div>
@@ -292,13 +292,13 @@
 
                 <h3 class="semi-section-title">Methodology</h3>
                 <div class="semi-method-grid">
-                    <div class="semi-method-step"><span class="semi-step-num">01 · LABELS</span><strong>One target per wafer</strong><p>I averaged the 89 published silicon etch measurements on each wafer. Joining these measurements with process records yielded 88 labeled wafer runs from 10 lots.</p></div>
-                    <div class="semi-method-step"><span class="semi-step-num">02 · TIME WINDOWS</span><strong>Only signals available by prediction time</strong><p>I isolated the active etch from RF power, then summarized five sensor families within the first 120 seconds, first 300 seconds, or full roughly 598-second etch.</p></div>
-                    <div class="semi-method-step"><span class="semi-step-num">03 · FEATURES &amp; MODELS</span><strong>Compare context with sensors</strong><p>For pressure, Gas5 flow, platen Vpp, source reflected power, and helium pressure, I calculated mean, variability, and late-minus-early change. Ridge regression (α = 10) used median imputation and scaling.</p></div>
-                    <div class="semi-method-step"><span class="semi-step-num">04 · VALIDATION</span><strong>Test on a different lot</strong><p>I held out one entire lot, trained on the other nine, and repeated this for all 10 lots. Imputation and scaling were fit on training data inside each fold. I compared errors in µm against simple baselines.</p></div>
+                    <div class="semi-method-step"><span class="semi-step-num">01 · SUPERVISED TARGET</span><strong>Regression target: wafer-average etch</strong><p>I aggregated 89 spatial silicon-etch measurements into one continuous target per wafer, then joined the targets to process traces: 88 labeled wafers across 10 lots.</p></div>
+                    <div class="semi-method-step"><span class="semi-step-num">02 · TEMPORAL FEATURES</span><strong>Time-series feature engineering</strong><p>I identified the active etch from RF power. For pressure, Gas5 flow, platen Vpp, reflected power, and helium pressure, I calculated window means, standard deviations, and late-minus-early changes at 120 s, 300 s, and the full roughly 598 s.</p></div>
+                    <div class="semi-method-step"><span class="semi-step-num">03 · REGULARIZED MODEL</span><strong>Ridge regression with L2 regularization</strong><p>I compared wafer order, sensor features, and their combination using Ridge regression (α = 10). The modeling pipeline applied median imputation and feature scaling before fitting; regularization helps stabilize a linear model with correlated sensor summaries.</p></div>
+                    <div class="semi-method-step"><span class="semi-step-num">04 · GROUPED VALIDATION</span><strong>Leave-one-lot-out cross-validation</strong><p>I trained on nine lots and tested on the tenth, repeating this for all 10 lots. Imputation and scaling were fitted within each training fold to prevent preprocessing leakage. I compared out-of-lot predictions using mean absolute error (MAE, µm).</p></div>
                 </div>
 
-                <h3 class="semi-section-title">Full-run model comparison</h3>
+                <h3 class="semi-section-title">Baseline benchmarking · full-run models</h3>
                 <p class="semi-muted">All four models below predict the same wafer-average outcome for the same 88 labeled wafers. Sensor models in this table use the <strong>completed etch trace</strong>. Mean absolute error (MAE) is pooled across held-out wafer predictions; lower is better.</p>
                 <div class="semi-table-wrap">
                     <table class="semi-table">
@@ -306,15 +306,15 @@
                         <thead><tr><th scope="col">Model</th><th scope="col">Inputs</th><th scope="col">MAE (µm)</th></tr></thead>
                         <tbody>
                             <tr><td>Training mean</td><td>Average measured depth from training lots</td><td>0.348</td></tr>
-                            <tr><td>Wafer order</td><td>Position of the wafer within its lot</td><td>0.190</td></tr>
-                            <tr><td>Sensors only</td><td>Full-run process-signal summaries</td><td>0.156</td></tr>
-                            <tr class="semi-best"><td>Wafer order + sensors</td><td>Both sources of information</td><td>0.127</td></tr>
+                            <tr><td>Ridge: wafer order</td><td>Position of the wafer within its lot</td><td>0.190</td></tr>
+                            <tr><td>Ridge: sensors only</td><td>Full-run process-signal summaries</td><td>0.156</td></tr>
+                            <tr class="semi-best"><td>Ridge: order + sensors</td><td>Both sources of information</td><td>0.127</td></tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="semi-key-result">Combining wafer order and sensor behavior improved prediction over either source alone. The full-run comparison establishes the value of process signals; the next analysis asks how early those signals become useful.</div>
 
-                <h3 class="semi-section-title">How early can the estimate be made?</h3>
+                <h3 class="semi-section-title">Temporal horizon experiment · how early can we predict?</h3>
                 <p class="semi-muted">I repeated the order-plus-sensors model with progressively longer windows from the start of the active etch. These are retrospective predictions of the final wafer measurement, evaluated by holding out whole lots.</p>
                 <div class="semi-chart" role="img" aria-label="Mean absolute error in micrometres: wafer order only 0.190; wafer order with first 120 seconds of sensors 0.130; wafer order with full etch sensors 0.127. Lower is better.">
                     <div class="semi-bar-row"><span class="semi-bar-label">Wafer order only</span><div class="semi-bar-track"><span class="semi-bar semi-bar-order"></span></div><span class="semi-bar-value">0.190</span></div>
@@ -334,7 +334,7 @@
                 </div>
                 <p class="semi-muted" style="margin-top:12px;">The first 120 seconds lowered pooled MAE by about 32% versus wafer order alone and came within 0.003 µm of the full-trace result. The 300-second score was slightly worse than both; more readings did not reliably lower held-out error in this small dataset.</p>
 
-                <h3 class="semi-section-title">Check across lots</h3>
+                <h3 class="semi-section-title">Grouped error analysis · check across lots</h3>
                 <p class="semi-muted">The early sensor model improved on wafer order for nine held-out lots. Lot 2 was the exception: its MAE rose from 0.186 to 0.212 µm. This lot-level view prevents the pooled score from hiding a weaker case.</p>
                 <div class="semi-lot-list" role="img" aria-label="Early sensors improve mean absolute error for lots 1 and 3 through 10; lot 2 gets worse.">
                     <span>Lot 1 ✓</span><span class="semi-exception">Lot 2 ✕</span><span>Lot 3 ✓</span><span>Lot 4 ✓</span><span>Lot 5 ✓</span>
@@ -342,7 +342,7 @@
                 </div>
 
                 <details class="semi-detail">
-                    <summary>Which sensor families helped the full-run model?</summary>
+                    <summary>Feature ablation · which sensor families helped?</summary>
                     <p>I removed one sensor family at a time from the wafer-order-plus-sensors model and recalculated pooled MAE. A larger rise means the family carried more predictive information in this setup.</p>
                     <div class="semi-table-wrap">
                         <table class="semi-table">
@@ -375,11 +375,11 @@
 
         <div class="card-box" style="border-left: 5px solid #8e44ad;">
 
-            <h3 style="margin-bottom: 5px; color: #2c3e50;">Project Spotlight: Literary Analytics</h3>
+            <h3 style="margin-bottom: 5px; color: #2c3e50;">Project Spotlight: Reading Network</h3>
 
             <span class="stat-badge" style="background: #f3e5f5; color: #8e44ad;">Python (Pandas)</span>
 
-            <span class="stat-badge" style="background: #f3e5f5; color: #8e44ad;">Web Scraping</span>
+            <span class="stat-badge" style="background: #f3e5f5; color: #8e44ad;">Network Visualization</span>
 
             <span class="stat-badge" style="background: #f3e5f5; color: #8e44ad;">Plotly</span>
 
@@ -387,41 +387,14 @@
 
             <p style="font-size: 0.95em; color: #555; margin-top: 10px;">
 
-                I built cool Geospatial visualisation  to analyze top fantasy books on Goodreads. 
-
-                To find Hidden Gems- books with high ratings but low popularity-and visualize the global distribution of fantasy authors.
-
-            </p>
-
-
-
-            <h4 style="margin-top: 30px; border-bottom: 1px solid #eee; padding-bottom: 10px;"> Geographical Origin of Fantasy Authors</h4>
-
-            <div class="chart-container" style="height: 500px;">
-
-                <iframe src="literary_map.html" width="100%" height="100%" style="border: none; border-radius: 12px;"></iframe>
-
-            </div>
-
-
-
-            <h4 style="margin-top: 40px; border-bottom: 1px solid #eee; padding-bottom: 10px;"> The "Hidden Gem" Finder (Rating vs. Popularity)</h4>
-
-            <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">
-
-                <em>Data is taken from goodreads top 100 epic fantasy books. Webscrapping of authors's origins and genres are done via python libraries. </em>
+                I visualized my Goodreads reading history as an interactive network of authors and genres.
+                Explore the connections to see which authors appear most often in each genre.
 
             </p>
 
-            <div class="chart-container" style="height: 600px;">
-
-                <iframe src="goodreads_interactive_scatter.html" width="100%" height="100%" style="border: none; border-radius: 12px;"></iframe>
-
-            </div>
 
 
-
-            <h4 style="margin-top: 40px; border-bottom: 1px solid #eee; padding-bottom: 10px;"> My Personal Reading Constellation</h4>
+            <h4 style="margin-top: 30px; border-bottom: 1px solid #eee; padding-bottom: 10px;">My Personal Reading Constellation</h4>
 
             <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">
 
