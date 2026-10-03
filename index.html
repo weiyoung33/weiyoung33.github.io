@@ -4,9 +4,9 @@
 
 <head>
 
-    <title>Neo Wei Young | Data Science & Semiconductor Analytics</title>
+    <title>Neo Wei Young | Data Science & Applied Analytics</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Neo Wei Young’s data science portfolio, including early virtual metrology for semiconductor plasma etching.">
+    <meta name="description" content="Neo Wei Young’s data science portfolio: semiconductor virtual metrology and Formula 1 strategy analytics.">
 
 
 
@@ -215,6 +215,63 @@
             .semi-bar-label { grid-column: 1 / -1; }
             .semi-lot-list { grid-template-columns: repeat(5,1fr); }
         }
+
+        /* Pit Window Lab: styles are scoped to the F1 section. */
+        .pit-project { padding: 0; overflow: hidden; border-color: #334b58; background: #f9fcfd; }
+        .pit-project * { box-sizing: border-box; }
+        .pit-hero { padding: 32px 34px; color: #f5fbff; background: linear-gradient(130deg,#122c3e,#164a53); }
+        .pit-kicker { color: #75e5d3; text-transform: uppercase; letter-spacing: .14em; font-size: .76rem; font-weight: 800; }
+        .pit-hero h2 { margin: 10px 0 12px; color: white; font-size: clamp(1.7rem,4vw,2.35rem); line-height: 1.15; }
+        .pit-hero p { color: #d9edf0; line-height: 1.6; margin: 0; max-width: 690px; }
+        .pit-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 19px; }
+        .pit-tags span { border: 1px solid #72adaf; background: #ffffff16; border-radius: 30px; padding: 5px 9px; font-size: .78rem; }
+        .pit-body { padding: 27px 34px 34px; color: #274550; }
+        .pit-body p { line-height: 1.6; }
+        .pit-section-title { color: #173e4a; font-size: 1.17rem; margin: 30px 0 9px; }
+        .pit-muted { color: #4f6870; font-size: .9rem; margin: 0 0 15px; }
+        .pit-stats { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 11px; }
+        .pit-stat { background: #ecf6f5; border: 1px solid #d5eae8; border-radius: 10px; padding: 16px; }
+        .pit-stat strong { display: block; color: #0b5961; font-size: 1.65rem; line-height: 1.2; font-variant-numeric: tabular-nums; }
+        .pit-stat span { display: block; color: #4b686c; font-size: .81rem; line-height: 1.4; margin-top: 7px; }
+        .pit-note { background: #eef5f6; border-left: 4px solid #24878c; border-radius: 0 8px 8px 0; padding: 13px 17px; margin: 17px 0; font-size: .88rem; line-height: 1.6; }
+        .pit-note strong { color: #164853; }
+        .pit-chart-panel { background: white; border: 1px solid #d7e6e9; border-radius: 10px; padding: 18px; }
+        .pit-control-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 13px; margin: 16px 0; }
+        .pit-control { padding: 12px 14px; border: 1px solid #d8e9e9; border-radius: 9px; background: #f5faf9; }
+        .pit-control label { color: #254753; font-size: .83rem; display: flex; justify-content: space-between; gap: 8px; font-weight: 700; }
+        .pit-control output { color: #087b74; white-space: nowrap; font-variant-numeric: tabular-nums; }
+        .pit-control input { width: 100%; accent-color: #0c9185; cursor: pointer; margin: 10px 0 0; }
+        .pit-control small { display: block; color: #5f777e; line-height: 1.45; }
+        .pit-chart { width: 100%; height: auto; display: block; }
+        .pit-chart text { fill: #56727c; font: 12px system-ui, sans-serif; }
+        .pit-chart .pit-tick { stroke: #cadbdd; stroke-width: 1; }
+        .pit-chart .pit-band { fill: #1cad97; opacity: .16; }
+        .pit-chart .pit-marker { stroke: #087b74; stroke-width: 2; }
+        .pit-chart .pit-dot { fill: #95aab3; }
+        .pit-chart .pit-dot.pit-near { fill: #0b9b8d; }
+        .pit-chart .pit-strong-label { fill: #174a55; font-weight: 750; }
+        .pit-count { color: #0c746b; font-weight: 800; font-size: 1.22rem; }
+        .pit-result { padding: 17px; background: #eaf6f3; border: 1px solid #cae4df; border-radius: 10px; }
+        .pit-result strong { color: #085f58; font-size: 1.38rem; font-variant-numeric: tabular-nums; }
+        .pit-result span { color: #274b52; font-weight: 700; }
+        .pit-result p { margin: 4px 0 0; color: #456269; font-size: .85rem; }
+        .pit-methods { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 11px; }
+        .pit-method { border: 1px solid #d8e8e9; background: #f5faf9; border-radius: 9px; padding: 15px; }
+        .pit-method b { display: block; color: #1d5360; font-size: .9rem; }
+        .pit-method p { margin: 6px 0 0; font-size: .83rem; color: #537079; }
+        .pit-table-wrap { overflow-x: auto; border: 1px solid #d8e8e9; border-radius: 9px; margin-top: 14px; }
+        .pit-table { border-collapse: collapse; min-width: 530px; width: 100%; font-size: .84rem; }
+        .pit-table th,.pit-table td { padding: 10px 12px; border-bottom: 1px solid #e4eded; text-align: left; }
+        .pit-table tr:last-child td { border-bottom: 0; }
+        .pit-table th { background: #edf5f5; color: #45636b; }
+        .pit-table td:nth-child(2),.pit-table td:nth-child(3),.pit-table th:nth-child(2),.pit-table th:nth-child(3) { text-align: right; font-variant-numeric: tabular-nums; }
+        .pit-sources { margin-top: 17px; border-top: 1px solid #dce9e9; padding-top: 13px; color: #56717a; font-size: .8rem; }
+        .pit-sources a { color: #08767a; }
+        @media(max-width:670px) {
+            .pit-hero { padding: 25px 20px; }
+            .pit-body { padding: 20px 19px 25px; }
+            .pit-stats,.pit-control-grid,.pit-methods { grid-template-columns: 1fr; }
+        }
     </style>
 
 </head>
@@ -257,7 +314,7 @@
 
     <div class="container">
 
-        <h1>Data Science &amp; Semiconductor Analytics</h1>
+        <h1>Data Science &amp; Applied Analytics</h1>
 
         <p style="color: #7f8c8d;">Business Analytics Undergraduate @ NUS</p>
 
@@ -370,6 +427,67 @@
                     <a href="https://github.com/cpngfan-ui/bosch-etch-virtual-metrology" target="_blank" rel="noopener noreferrer">full-run wafer-mean benchmark</a>.
                     This project examines prediction using short early sensor windows.
                 </div>
+            </div>
+        </section>
+
+
+        <section class="card-box pit-project" id="pit-window-project" aria-labelledby="pit-title">
+            <header class="pit-hero">
+                <div class="pit-kicker">Featured project · Sports analytics</div>
+                <h2 id="pit-title">Pit Window Lab: Strategy Under Uncertainty</h2>
+                <p>Should a Formula 1 team pit now or wait one lap? I reconstructed the 2024 Singapore Grand Prix at the end of lap 20, trained a short-horizon pace forecast on earlier race data, and explored how rejoin traffic and explicit assumptions change the decision.</p>
+                <div class="pit-tags" aria-label="Project tools and methods">
+                    <span>Python · Pandas</span><span>Time-series features</span><span>Ridge &amp; Huber regression</span><span>Out-of-year validation</span><span>Regime-aware filtering</span><span>Scenario analysis</span>
+                </div>
+            </header>
+            <div class="pit-body">
+                <div class="pit-stats" aria-label="Pit Window Lab highlights">
+                    <div class="pit-stat"><strong>0.449 s</strong><span>2024 next clean-lap MAE from the selected last-three-lap median baseline</span></div>
+                    <div class="pit-stat"><strong>3 stops</strong><span>Earlier Singapore green-flag candidates under both clearance assumptions</span></div>
+                    <div class="pit-stat"><strong>5 cars</strong><span>Within ±4 s of a hypothetical 25 s rejoin loss at the lap-20 cutoff</span></div>
+                </div>
+
+                <h3 class="pit-section-title">The result</h3>
+                <p class="pit-muted">At the end of Verstappen's lap 20, the observed race state placed him P2 and 15.156 seconds behind the leader. Five rivals were near a <em>hypothetical</em> 25-second rejoin point, but that count changes as the assumed loss changes. The count identifies possible traffic exposure; it does not measure seconds lost behind another car.</p>
+                <div class="pit-note"><strong>Data audit:</strong> The raw median two-lap pit transition excess across 24 Singapore 2023 stops was 96.42 s. Once Safety Car and VSC windows were excluded, three candidates remained at 26.29, 26.84, and 29.45 s (median 26.84 s). These three occur later in the race and are too few to calibrate an exact lap-20 pit loss. The 2024 Singapore median of 28.97 s is a <strong>retrospective check only</strong>.</div>
+
+                <h3 class="pit-section-title">Interactive rejoin frontier</h3>
+                <p class="pit-muted">Adjust the effective rejoin loss and proximity threshold. The green corridor marks an assumption; the dots are fresh numeric same-lap rival gaps observed at the decision cutoff.</p>
+                <div class="pit-control-grid">
+                    <div class="pit-control"><label for="pit-loss">Assumed effective rejoin loss <output id="pit-loss-value">25.0 s</output></label><input id="pit-loss" type="range" min="10" max="45" step="0.5" value="25"><small>Independent scenario input, not a measured pit-loss estimate.</small></div>
+                    <div class="pit-control"><label for="pit-width">Nearby corridor, either side <output id="pit-width-value">4.0 s</output></label><input id="pit-width" type="range" min="2" max="6" step="0.5" value="4"><small>An exposure threshold, not a traffic-time penalty.</small></div>
+                </div>
+                <div class="pit-chart-panel">
+                    <svg id="pit-gap-chart" class="pit-chart" viewBox="0 0 780 180" role="img" aria-labelledby="pit-chart-title pit-chart-desc"><title id="pit-chart-title">Rival gaps and hypothetical rejoin corridor</title><desc id="pit-chart-desc">A green band follows the selected rejoin-loss value. Dots show fresh same-lap rival gaps behind Verstappen at the lap-20 cutoff.</desc></svg>
+                    <p class="pit-muted" style="margin:5px 0 0;"><span id="pit-near-count" class="pit-count">5</span> nearby rivals: <span id="pit-near-list" aria-live="polite"></span></p>
+                </div>
+
+                <h3 class="pit-section-title">Wait one lap or pit now?</h3>
+                <p class="pit-muted">Try illustrative time effects below. Traffic costs are user inputs; they are <strong>not</strong> inferred from the nearby-car count. A positive wait-minus-now value favors pitting now under these assumptions.</p>
+                <div class="pit-control-grid">
+                    <div class="pit-control"><label for="pit-fresh">Fresh-tyre benefit from pitting now <output id="pit-fresh-value">0.80 s</output></label><input id="pit-fresh" type="range" min="0" max="3" step="0.05" value="0.8"></div>
+                    <div class="pit-control"><label for="pit-old">Extra old-tyre cost if waiting <output id="pit-old-value">0.15 s</output></label><input id="pit-old" type="range" min="0" max="2" step="0.05" value="0.15"></div>
+                    <div class="pit-control"><label for="pit-early">Pit-now traffic cost <output id="pit-early-value">1.00 s</output></label><input id="pit-early" type="range" min="0" max="4" step="0.05" value="1"></div>
+                    <div class="pit-control"><label for="pit-late">Wait-then-pit traffic cost <output id="pit-late-value">0.00 s</output></label><input id="pit-late" type="range" min="0" max="4" step="0.05" value="0"></div>
+                </div>
+                <div class="pit-result"><strong id="pit-delta">−0.05 s</strong> <span>wait minus pit now · <span id="pit-call">Too close to call</span></span><p id="pit-explain">The difference is inside the illustrative ±1.50 s decision margin.</p></div>
+                <p class="pit-muted" style="margin-top:10px;">Calculation: fresh-tyre benefit + extra old-tyre cost + wait traffic − pit-now traffic. The ±1.50 s margin is a display threshold, not a calibrated confidence interval.</p>
+
+                <h3 class="pit-section-title">Methodology and validation</h3>
+                <div class="pit-methods">
+                    <div class="pit-method"><b>01 · Timestamped race state</b><p>Joined laps, stints, pits, intervals, positions, and race control. Rival gaps use records available by the estimated lap-20 decision time.</p></div>
+                    <div class="pit-method"><b>02 · Model benchmarking</b><p>Used Singapore 2023 for training and 2024/2025 as out-of-year checks. Compared a rolling median, absolute Ridge, and residual Huber regression.</p></div>
+                    <div class="pit-method"><b>03 · Regime-aware pit audit</b><p>Excluded Safety Car and VSC overlap. Three Singapore 2023 stops pass both 180-second and 300-second clearance guards.</p></div>
+                    <div class="pit-method"><b>04 · Sensitivity, not hindsight</b><p>Swept assumed rejoin losses and explicit tyre/traffic effects. Later 2024 pit stops were used only for retrospective checks.</p></div>
+                </div>
+                <div class="pit-table-wrap"><table class="pit-table"><caption style="text-align:left;padding:10px 12px;color:#526e75;">Next clean-lap forecast · mean absolute error (seconds)</caption><thead><tr><th scope="col">Model</th><th scope="col">Singapore 2024</th><th scope="col">Singapore 2025</th><th scope="col">Interpretation</th></tr></thead><tbody>
+                    <tr><td>Last-three-lap median</td><td>0.449</td><td>0.586</td><td>Selected simple baseline</td></tr>
+                    <tr><td>Residual Huber regression</td><td>0.430</td><td>0.541</td><td>Small improvement</td></tr>
+                    <tr><td>Absolute Ridge regression</td><td>1.677</td><td>2.250</td><td>Underperforms</td></tr>
+                </tbody></table></div>
+                <p class="pit-muted" style="margin-top:11px;">Huber improved 2024 MAE by 0.019 s, below the preset 0.05 s complexity threshold. This pace model forecasts ordinary next laps; it does not predict causal finishing position after a pit decision.</p>
+                <div class="pit-note"><strong>Scope:</strong> The three earlier same-circuit stops took place later than lap 20. Two-lap excess includes changing pace and is not an observed effective rejoin loss. Traffic penalties, tyre advantage, and wait-versus-pit-now outcome remain scenario assumptions. The project demonstrates data leakage control, temporal validation, regime filtering, and decision sensitivity.</div>
+                <div class="pit-sources">Data: <a href="https://openf1.org/docs/" target="_blank" rel="noopener noreferrer">OpenF1 API</a>. Race context: <a href="https://www.formula1.com/en/video/2023-singapore-grand-prix-safety-car-deployed-after-logan-sargeant-hits-the-wall.1777289449389895048" target="_blank" rel="noopener noreferrer">2023 Safety Car</a>, <a href="https://www.formula1.com/en/latest/article/watch-one-of-f1s-most-nail-biting-finishes-relive-the-dramatic-final-few.5KhzwAsfsZF61JbXlE7NLg" target="_blank" rel="noopener noreferrer">2023 VSC</a>, and <a href="https://www.formula1.com/en/latest/article/facts-and-stats-norris-becomes-fifth-winner-in-five-years-at-first-safety.5mUfDxYMC0wzslttHeAY9f" target="_blank" rel="noopener noreferrer">2024 Safety Car-free race</a>. This is a historical educational replay, not an official team strategy tool.</div>
             </div>
         </section>
 
@@ -520,7 +638,7 @@
 
         const titleText = "Hi, I'm Neo Wei Young.";
 
-        const bioText = "I turn complex data into clear decisions, with a growing focus on semiconductor process analytics and machine learning.";
+        const bioText = "I turn complex data into clear decisions, from semiconductor process analytics to race strategy.";
 
         const titleElement = document.getElementById("type-title");
 
@@ -612,6 +730,67 @@
 
         }
 
+    </script>
+
+
+    <script>
+    (() => {
+        const root = document.getElementById('pit-window-project');
+        if (!root) return;
+        const get = id => root.querySelector('#' + id);
+        const rivals = [
+            ['RUS',11.08],['PIA',12.55],['HUL',21.23],['ALO',22.01],
+            ['LEC',22.51],['COL',25.18],['PER',28.30],['TSU',32.02],
+            ['OCO',35.13],['HAM',37.30],['MAG',38.49],['GAS',41.44],
+            ['STR',45.80],['SAI',46.55],['ZHO',50.21],['BOT',53.94],['RIC',60.30]
+        ];
+        const ns = 'http://www.w3.org/2000/svg';
+        function svg(tag, attrs, value) {
+            const node = document.createElementNS(ns, tag);
+            for (const [key, entry] of Object.entries(attrs)) node.setAttribute(key, String(entry));
+            if (value !== undefined) node.textContent = value;
+            return node;
+        }
+        function updateRejoin() {
+            const loss = +get('pit-loss').value, width = +get('pit-width').value;
+            get('pit-loss-value').textContent = loss.toFixed(1) + ' s';
+            get('pit-width-value').textContent = width.toFixed(1) + ' s';
+            const near = rivals.filter(([,gap]) => Math.abs(gap-loss) <= width);
+            get('pit-near-count').textContent = String(near.length);
+            get('pit-near-list').textContent = near.length ? near.map(([name,gap]) => name + ' (+' + gap.toFixed(2) + ' s)').join(' · ') : 'none at this cutoff';
+            const chart = get('pit-gap-chart');
+            chart.querySelectorAll('.pit-generated').forEach(node => node.remove());
+            const x = gap => 38 + gap / 65 * 700;
+            function add(node) { node.classList.add('pit-generated'); chart.appendChild(node); }
+            for (let tick=0; tick<=60; tick+=10) {
+                add(svg('line',{x1:x(tick),x2:x(tick),y1:34,y2:130,class:'pit-tick'}));
+                add(svg('text',{x:x(tick),y:150,'text-anchor':'middle'},String(tick)));
+            }
+            const left = Math.max(0,loss-width),right = Math.min(65,loss+width);
+            add(svg('rect',{x:x(left),y:34,width:x(right)-x(left),height:96,rx:7,class:'pit-band'}));
+            add(svg('line',{x1:x(loss),x2:x(loss),y1:25,y2:130,class:'pit-marker'}));
+            add(svg('text',{x:x(loss),y:19,'text-anchor':'middle',class:'pit-strong-label'},loss.toFixed(1)+' s'));
+            rivals.forEach(([name,gap],i) => {
+                const selected = Math.abs(gap-loss) <= width;
+                const dot = svg('circle',{cx:x(gap),cy:66+(i%3)*19,r:selected?5.8:4,class:selected?'pit-dot pit-near':'pit-dot'});
+                dot.appendChild(svg('title',{},name+' · '+gap.toFixed(2)+' s behind'));
+                add(dot);
+            });
+            add(svg('text',{x:388,y:175,'text-anchor':'middle'},'Observed seconds behind Verstappen at lap 20'));
+        }
+        function updateChoice() {
+            for (const id of ['fresh','old','early','late']) get('pit-'+id+'-value').textContent = (+get('pit-'+id).value).toFixed(2)+' s';
+            const delta = +get('pit-fresh').value + +get('pit-old').value + +get('pit-late').value - +get('pit-early').value;
+            get('pit-delta').textContent = (delta<0?'−':'+')+Math.abs(delta).toFixed(2)+' s';
+            const call = get('pit-call'), explain = get('pit-explain');
+            if (Math.abs(delta)<=1.5) { call.textContent='Too close to call'; explain.textContent='The difference is inside the illustrative ±1.50 s decision margin.'; }
+            else if (delta>0) { call.textContent='Scenario favors pit now'; explain.textContent='Conditional on the four inputs above, not an observed race outcome.'; }
+            else { call.textContent='Scenario favors waiting'; explain.textContent='Conditional on the four inputs above, not an observed race outcome.'; }
+        }
+        ['pit-loss','pit-width'].forEach(id=>get(id).addEventListener('input',updateRejoin));
+        ['pit-fresh','pit-old','pit-early','pit-late'].forEach(id=>get(id).addEventListener('input',updateChoice));
+        updateRejoin(); updateChoice();
+    })();
     </script>
 
 </body>
