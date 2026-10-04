@@ -272,6 +272,20 @@
             .pit-body { padding: 20px 19px 25px; }
             .pit-stats,.pit-control-grid,.pit-methods { grid-template-columns: 1fr; }
         }
+
+        /* Plain-language Pit Window Lab additions. */
+        .pit-flow { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; }
+        .pit-flow div { border: 1px solid #d5eae8; background: #eff7f6; border-radius: 9px; padding: 13px; }
+        .pit-flow b { display: block; color: #12636b; font-size: .88rem; margin-bottom: 4px; }
+        .pit-flow span { color: #47636b; font-size: .83rem; line-height: 1.45; }
+        .pit-single-control { grid-template-columns: 1fr; max-width: 540px; }
+        .pit-legend { color: #526d75; font-size: .82rem; line-height: 1.45; margin: 0 0 10px; }
+        .pit-legend-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #0b9b8d; margin-right: 5px; }
+        .pit-plain-result { font-size: 1.02rem; font-weight: 750; color: #0a6764; margin: 5px 0; }
+        .pit-details { border: 1px solid #d5e5e7; background: #fafdfd; border-radius: 10px; padding: 14px 17px; margin: 17px 0; }
+        .pit-details summary { cursor: pointer; color: #18515b; font-weight: 750; }
+        .pit-details[open] summary { margin-bottom: 14px; }
+        @media(max-width:670px) { .pit-flow { grid-template-columns: 1fr; } }
     </style>
 
 </head>
@@ -433,61 +447,72 @@
 
         <section class="card-box pit-project" id="pit-window-project" aria-labelledby="pit-title">
             <header class="pit-hero">
-                <div class="pit-kicker">Featured project · Sports analytics</div>
-                <h2 id="pit-title">Pit Window Lab: Strategy Under Uncertainty</h2>
-                <p>Should a Formula 1 team pit now or wait one lap? I reconstructed the 2024 Singapore Grand Prix at the end of lap 20, trained a short-horizon pace forecast on earlier race data, and explored how rejoin traffic and explicit assumptions change the decision.</p>
-                <div class="pit-tags" aria-label="Project tools and methods">
-                    <span>Python · Pandas</span><span>Time-series features</span><span>Ridge &amp; Huber regression</span><span>Out-of-year validation</span><span>Regime-aware filtering</span><span>Scenario analysis</span>
+                <div class="pit-kicker">Featured project · Formula 1 data science</div>
+                <h2 id="pit-title">Pit Window Lab: Should Max Pit Now?</h2>
+                <p>At the end of lap 20 in the 2024 Singapore Grand Prix, Max Verstappen was in second place. Stopping would give him fresh tyres, but he would lose time in the pit lane and might return near other cars. I used race data to explore that trade-off.</p>
+                <div class="pit-tags" aria-label="Data science methods">
+                    <span>Python · Pandas</span><span>Time-series forecasting</span><span>Ridge &amp; Huber regression</span><span>Out-of-year testing</span><span>Safety Car filtering</span><span>Sensitivity analysis</span>
                 </div>
             </header>
             <div class="pit-body">
-                <div class="pit-stats" aria-label="Pit Window Lab highlights">
-                    <div class="pit-stat"><strong>0.449 s</strong><span>2024 next clean-lap MAE from the selected last-three-lap median baseline</span></div>
-                    <div class="pit-stat"><strong>3 stops</strong><span>Earlier Singapore green-flag candidates under both clearance assumptions</span></div>
-                    <div class="pit-stat"><strong>5 cars</strong><span>Within ±4 s of a hypothetical 25 s rejoin loss at the lap-20 cutoff</span></div>
+                <div class="pit-flow" aria-label="The pit-stop question in three steps">
+                    <div><b>1 · Stop</b><span>The pit stop costs time.</span></div>
+                    <div><b>2 · Return</b><span>Other cars keep racing, so Max may come out near them.</span></div>
+                    <div><b>3 · Catch up</b><span>Fresh tyres may help him recover that time.</span></div>
                 </div>
 
-                <h3 class="pit-section-title">The result</h3>
-                <p class="pit-muted">At the end of Verstappen's lap 20, the observed race state placed him P2 and 15.156 seconds behind the leader. Five rivals were near a <em>hypothetical</em> 25-second rejoin point, but that count changes as the assumed loss changes. The count identifies possible traffic exposure; it does not measure seconds lost behind another car.</p>
-                <div class="pit-note"><strong>Data audit:</strong> The raw median two-lap pit transition excess across 24 Singapore 2023 stops was 96.42 s. Once Safety Car and VSC windows were excluded, three candidates remained at 26.29, 26.84, and 29.45 s (median 26.84 s). These three occur later in the race and are too few to calibrate an exact lap-20 pit loss. The 2024 Singapore median of 28.97 s is a <strong>retrospective check only</strong>.</div>
+                <h3 class="pit-section-title">The moment we replayed</h3>
+                <p class="pit-muted">Max was <strong>second, 15.156 seconds behind the leader</strong> after lap 20. We froze the timing data at that moment, then asked what might happen if he pitted. Later race events were kept out of the decision.</p>
 
-                <h3 class="pit-section-title">Interactive rejoin frontier</h3>
-                <p class="pit-muted">Adjust the effective rejoin loss and proximity threshold. The green corridor marks an assumption; the dots are fresh numeric same-lap rival gaps observed at the decision cutoff.</p>
-                <div class="pit-control-grid">
-                    <div class="pit-control"><label for="pit-loss">Assumed effective rejoin loss <output id="pit-loss-value">25.0 s</output></label><input id="pit-loss" type="range" min="10" max="45" step="0.5" value="25"><small>Independent scenario input, not a measured pit-loss estimate.</small></div>
-                    <div class="pit-control"><label for="pit-width">Nearby corridor, either side <output id="pit-width-value">4.0 s</output></label><input id="pit-width" type="range" min="2" max="6" step="0.5" value="4"><small>An exposure threshold, not a traffic-time penalty.</small></div>
+                <h3 class="pit-section-title">Who might Max come out near?</h3>
+                <p class="pit-muted">Each dot below is another driver. The number on the horizontal axis shows how many seconds behind Max that driver was <em>before</em> a possible stop. If Max loses time in the pits, those cars continue moving while he is stopped.</p>
+                <div class="pit-control-grid pit-single-control">
+                    <div class="pit-control"><label for="pit-loss">Imagine Max loses <output id="pit-loss-value">25.0 s</output> by pitting</label><input id="pit-loss" type="range" min="10" max="45" step="0.5" value="25"><small>Move the slider to try a different assumption. This time loss has not been measured precisely.</small></div>
                 </div>
                 <div class="pit-chart-panel">
-                    <svg id="pit-gap-chart" class="pit-chart" viewBox="0 0 780 180" role="img" aria-labelledby="pit-chart-title pit-chart-desc"><title id="pit-chart-title">Rival gaps and hypothetical rejoin corridor</title><desc id="pit-chart-desc">A green band follows the selected rejoin-loss value. Dots show fresh same-lap rival gaps behind Verstappen at the lap-20 cutoff.</desc></svg>
-                    <p class="pit-muted" style="margin:5px 0 0;"><span id="pit-near-count" class="pit-count">5</span> nearby rivals: <span id="pit-near-list" aria-live="polite"></span></p>
+                    <svg id="pit-gap-chart" class="pit-chart" viewBox="0 0 780 180" role="img" aria-labelledby="pit-chart-title pit-chart-desc"><title id="pit-chart-title">Cars Max might return near after pitting</title><desc id="pit-chart-desc">Each dot is a driver's observed gap behind Max after lap 20. The green band shows the assumed pit-stop time loss, plus or minus four seconds.</desc></svg>
+                    <p class="pit-legend"><span class="pit-legend-dot"></span> Green dots: cars within 4 seconds of the imagined return point. Grey dots: other cars.</p>
+                    <p id="pit-plain-result" class="pit-plain-result" aria-live="polite">If the stop costs 25 seconds, Max might return near 5 cars.</p>
+                    <p class="pit-muted" style="margin:5px 0 0;">Those cars: <span id="pit-near-list"></span></p>
                 </div>
+                <p class="pit-muted" style="margin-top:10px;">“Near” means close in the timing data. It does not prove that Max would be stuck behind them or tell us how much time traffic would cost.</p>
 
-                <h3 class="pit-section-title">Wait one lap or pit now?</h3>
-                <p class="pit-muted">Try illustrative time effects below. Traffic costs are user inputs; they are <strong>not</strong> inferred from the nearby-car count. A positive wait-minus-now value favors pitting now under these assumptions.</p>
-                <div class="pit-control-grid">
-                    <div class="pit-control"><label for="pit-fresh">Fresh-tyre benefit from pitting now <output id="pit-fresh-value">0.80 s</output></label><input id="pit-fresh" type="range" min="0" max="3" step="0.05" value="0.8"></div>
-                    <div class="pit-control"><label for="pit-old">Extra old-tyre cost if waiting <output id="pit-old-value">0.15 s</output></label><input id="pit-old" type="range" min="0" max="2" step="0.05" value="0.15"></div>
-                    <div class="pit-control"><label for="pit-early">Pit-now traffic cost <output id="pit-early-value">1.00 s</output></label><input id="pit-early" type="range" min="0" max="4" step="0.05" value="1"></div>
-                    <div class="pit-control"><label for="pit-late">Wait-then-pit traffic cost <output id="pit-late-value">0.00 s</output></label><input id="pit-late" type="range" min="0" max="4" step="0.05" value="0"></div>
-                </div>
-                <div class="pit-result"><strong id="pit-delta">−0.05 s</strong> <span>wait minus pit now · <span id="pit-call">Too close to call</span></span><p id="pit-explain">The difference is inside the illustrative ±1.50 s decision margin.</p></div>
-                <p class="pit-muted" style="margin-top:10px;">Calculation: fresh-tyre benefit + extra old-tyre cost + wait traffic − pit-now traffic. The ±1.50 s margin is a display threshold, not a calibrated confidence interval.</p>
+                <h3 class="pit-section-title">Would pitting now beat waiting one lap?</h3>
+                <p class="pit-muted">Fresh tyres could make the next lap faster. Waiting avoids an immediate stop but means another lap on older tyres. We do not have a reliable measured traffic penalty, so the data cannot give a definite answer. With the example assumptions below, the two choices differ by just <strong>0.05 seconds</strong>: too close to call.</p>
+                <details class="pit-details">
+                    <summary>Try the optional strategy calculator</summary>
+                    <p class="pit-muted">These four values are assumptions you can change. They are not predictions made by the dots above. Positive “wait minus pit now” favors pitting now.</p>
+                    <div class="pit-control-grid">
+                        <div class="pit-control"><label for="pit-fresh">Time saved by fresher tyres <output id="pit-fresh-value">0.80 s</output></label><input id="pit-fresh" type="range" min="0" max="3" step="0.05" value="0.8"></div>
+                        <div class="pit-control"><label for="pit-old">Cost of one more lap on old tyres <output id="pit-old-value">0.15 s</output></label><input id="pit-old" type="range" min="0" max="2" step="0.05" value="0.15"></div>
+                        <div class="pit-control"><label for="pit-early">Traffic time lost if pitting now <output id="pit-early-value">1.00 s</output></label><input id="pit-early" type="range" min="0" max="4" step="0.05" value="1"></div>
+                        <div class="pit-control"><label for="pit-late">Traffic time lost if waiting <output id="pit-late-value">0.00 s</output></label><input id="pit-late" type="range" min="0" max="4" step="0.05" value="0"></div>
+                    </div>
+                    <div class="pit-result"><strong id="pit-delta">−0.05 s</strong> <span>wait minus pit now · <span id="pit-call">Too close to call</span></span><p id="pit-explain">The difference is inside the illustrative ±1.50 s decision margin.</p></div>
+                    <p class="pit-muted" style="margin-top:10px;">The ±1.50 s margin is a caution rule for this demo, not a statistical confidence interval.</p>
+                </details>
 
-                <h3 class="pit-section-title">Methodology and validation</h3>
+                <h3 class="pit-section-title">Where the data science comes in</h3>
                 <div class="pit-methods">
-                    <div class="pit-method"><b>01 · Timestamped race state</b><p>Joined laps, stints, pits, intervals, positions, and race control. Rival gaps use records available by the estimated lap-20 decision time.</p></div>
-                    <div class="pit-method"><b>02 · Model benchmarking</b><p>Used Singapore 2023 for training and 2024/2025 as out-of-year checks. Compared a rolling median, absolute Ridge, and residual Huber regression.</p></div>
-                    <div class="pit-method"><b>03 · Regime-aware pit audit</b><p>Excluded Safety Car and VSC overlap. Three Singapore 2023 stops pass both 180-second and 300-second clearance guards.</p></div>
-                    <div class="pit-method"><b>04 · Sensitivity, not hindsight</b><p>Swept assumed rejoin losses and explicit tyre/traffic effects. Later 2024 pit stops were used only for retrospective checks.</p></div>
+                    <div class="pit-method"><b>Time-series data and a fair cutoff</b><p>I joined laps, tyre stints, pits, race positions, and gaps. The replay uses only records available by the end of lap 20.</p></div>
+                    <div class="pit-method"><b>Forecasting and model comparison</b><p>I predicted a driver's next normal lap from recent laps. A rolling-median baseline was compared with Ridge and Huber regression, tested on later years.</p></div>
+                    <div class="pit-method"><b>Safety Car data cleaning</b><p>Stops during a Safety Car or VSC distort pit timing. Filtering those race periods left only three potentially usable earlier Singapore stops.</p></div>
+                    <div class="pit-method"><b>Decision sensitivity</b><p>I changed the assumed stop time and traffic effects to show when the possible conclusion changes.</p></div>
                 </div>
-                <div class="pit-table-wrap"><table class="pit-table"><caption style="text-align:left;padding:10px 12px;color:#526e75;">Next clean-lap forecast · mean absolute error (seconds)</caption><thead><tr><th scope="col">Model</th><th scope="col">Singapore 2024</th><th scope="col">Singapore 2025</th><th scope="col">Interpretation</th></tr></thead><tbody>
-                    <tr><td>Last-three-lap median</td><td>0.449</td><td>0.586</td><td>Selected simple baseline</td></tr>
-                    <tr><td>Residual Huber regression</td><td>0.430</td><td>0.541</td><td>Small improvement</td></tr>
-                    <tr><td>Absolute Ridge regression</td><td>1.677</td><td>2.250</td><td>Underperforms</td></tr>
-                </tbody></table></div>
-                <p class="pit-muted" style="margin-top:11px;">Huber improved 2024 MAE by 0.019 s, below the preset 0.05 s complexity threshold. This pace model forecasts ordinary next laps; it does not predict causal finishing position after a pit decision.</p>
-                <div class="pit-note"><strong>Scope:</strong> The three earlier same-circuit stops took place later than lap 20. Two-lap excess includes changing pace and is not an observed effective rejoin loss. Traffic penalties, tyre advantage, and wait-versus-pit-now outcome remain scenario assumptions. The project demonstrates data leakage control, temporal validation, regime filtering, and decision sensitivity.</div>
-                <div class="pit-sources">Data: <a href="https://openf1.org/docs/" target="_blank" rel="noopener noreferrer">OpenF1 API</a>. Race context: <a href="https://www.formula1.com/en/video/2023-singapore-grand-prix-safety-car-deployed-after-logan-sargeant-hits-the-wall.1777289449389895048" target="_blank" rel="noopener noreferrer">2023 Safety Car</a>, <a href="https://www.formula1.com/en/latest/article/watch-one-of-f1s-most-nail-biting-finishes-relive-the-dramatic-final-few.5KhzwAsfsZF61JbXlE7NLg" target="_blank" rel="noopener noreferrer">2023 VSC</a>, and <a href="https://www.formula1.com/en/latest/article/facts-and-stats-norris-becomes-fifth-winner-in-five-years-at-first-safety.5mUfDxYMC0wzslttHeAY9f" target="_blank" rel="noopener noreferrer">2024 Safety Car-free race</a>. This is a historical educational replay, not an official team strategy tool.</div>
+                <p class="pit-muted" style="margin-top:15px;"><strong>How accurate was the pace forecast?</strong> The selected rolling-median baseline missed the next normal lap by 0.449 seconds on average in the 2024 test race. Huber regression improved that to 0.430 seconds, a small 0.019-second gain below our preset threshold for adding complexity.</p>
+                <details class="pit-details">
+                    <summary>See the full model results</summary>
+                    <div class="pit-table-wrap"><table class="pit-table"><caption style="text-align:left;padding:10px 12px;color:#526e75;">Next normal lap · mean absolute error in seconds (lower is better)</caption><thead><tr><th scope="col">Model</th><th scope="col">Singapore 2024</th><th scope="col">Singapore 2025</th><th scope="col">Interpretation</th></tr></thead><tbody>
+                        <tr><td>Last-three-lap median</td><td>0.449</td><td>0.586</td><td>Selected simple baseline</td></tr>
+                        <tr><td>Residual Huber regression</td><td>0.430</td><td>0.541</td><td>Small improvement</td></tr>
+                        <tr><td>Absolute Ridge regression</td><td>1.677</td><td>2.250</td><td>Underperforms</td></tr>
+                    </tbody></table></div>
+                </details>
+
+                <h3 class="pit-section-title">What we learned, and what we cannot claim</h3>
+                <p class="pit-muted">In the earlier 2023 Singapore race, the median “extra time across the pit-in and out laps” looked like 96.42 seconds across 24 stops. After excluding Safety Car and VSC periods, only three candidate stops remained: 26.29, 26.84, and 29.45 seconds. That extra-time measure includes more than the stop itself and the sample is small. The 2024 Singapore median of 28.97 seconds is a later check, <strong>not information available at lap 20</strong>.</p>
+                <div class="pit-note"><strong>Takeaway:</strong> We can forecast ordinary lap pace and show which rivals might be nearby under different stop-time assumptions. We cannot prove the best pit lap from these data because the true traffic cost and the result of a pit stop that did not happen are unknown.</div>
+                <div class="pit-sources">Data: <a href="https://openf1.org/docs/" target="_blank" rel="noopener noreferrer">OpenF1 API</a>. Race context: <a href="https://www.formula1.com/en/video/2023-singapore-grand-prix-safety-car-deployed-after-logan-sargeant-hits-the-wall.1777289449389895048" target="_blank" rel="noopener noreferrer">2023 Safety Car</a>, <a href="https://www.formula1.com/en/latest/article/watch-one-of-f1s-most-nail-biting-finishes-relive-the-dramatic-final-few.5KhzwAsfsZF61JbXlE7NLg" target="_blank" rel="noopener noreferrer">2023 VSC</a>, and <a href="https://www.formula1.com/en/latest/article/facts-and-stats-norris-becomes-fifth-winner-in-five-years-at-first-safety.5mUfDxYMC0wzslttHeAY9f" target="_blank" rel="noopener noreferrer">2024 race context</a>. Historical educational replay, not an official team strategy tool.</div>
             </div>
         </section>
 
@@ -744,7 +769,7 @@
             ['OCO',35.13],['HAM',37.30],['MAG',38.49],['GAS',41.44],
             ['STR',45.80],['SAI',46.55],['ZHO',50.21],['BOT',53.94],['RIC',60.30]
         ];
-        const ns = 'http://www.w3.org/2000/svg';
+        const ns = 'http://www.w3.org/2000/svg', nearbyWidth = 4;
         function svg(tag, attrs, value) {
             const node = document.createElementNS(ns, tag);
             for (const [key, entry] of Object.entries(attrs)) node.setAttribute(key, String(entry));
@@ -752,12 +777,11 @@
             return node;
         }
         function updateRejoin() {
-            const loss = +get('pit-loss').value, width = +get('pit-width').value;
+            const loss = +get('pit-loss').value;
             get('pit-loss-value').textContent = loss.toFixed(1) + ' s';
-            get('pit-width-value').textContent = width.toFixed(1) + ' s';
-            const near = rivals.filter(([,gap]) => Math.abs(gap-loss) <= width);
-            get('pit-near-count').textContent = String(near.length);
-            get('pit-near-list').textContent = near.length ? near.map(([name,gap]) => name + ' (+' + gap.toFixed(2) + ' s)').join(' · ') : 'none at this cutoff';
+            const near = rivals.filter(([,gap]) => Math.abs(gap-loss) <= nearbyWidth);
+            get('pit-near-list').textContent = near.length ? near.map(([name,gap]) => name + ' (+' + gap.toFixed(2) + ' s)').join(' · ') : 'none at this assumed stop time';
+            get('pit-plain-result').textContent = `If the stop costs ${loss.toFixed(1)} seconds, Max might return near ${near.length} ${near.length===1?'car':'cars'}.`;
             const chart = get('pit-gap-chart');
             chart.querySelectorAll('.pit-generated').forEach(node => node.remove());
             const x = gap => 38 + gap / 65 * 700;
@@ -766,17 +790,17 @@
                 add(svg('line',{x1:x(tick),x2:x(tick),y1:34,y2:130,class:'pit-tick'}));
                 add(svg('text',{x:x(tick),y:150,'text-anchor':'middle'},String(tick)));
             }
-            const left = Math.max(0,loss-width),right = Math.min(65,loss+width);
+            const left = Math.max(0,loss-nearbyWidth),right = Math.min(65,loss+nearbyWidth);
             add(svg('rect',{x:x(left),y:34,width:x(right)-x(left),height:96,rx:7,class:'pit-band'}));
             add(svg('line',{x1:x(loss),x2:x(loss),y1:25,y2:130,class:'pit-marker'}));
             add(svg('text',{x:x(loss),y:19,'text-anchor':'middle',class:'pit-strong-label'},loss.toFixed(1)+' s'));
             rivals.forEach(([name,gap],i) => {
-                const selected = Math.abs(gap-loss) <= width;
+                const selected = Math.abs(gap-loss) <= nearbyWidth;
                 const dot = svg('circle',{cx:x(gap),cy:66+(i%3)*19,r:selected?5.8:4,class:selected?'pit-dot pit-near':'pit-dot'});
-                dot.appendChild(svg('title',{},name+' · '+gap.toFixed(2)+' s behind'));
+                dot.appendChild(svg('title',{},name+' · '+gap.toFixed(2)+' s behind Max'));
                 add(dot);
             });
-            add(svg('text',{x:388,y:175,'text-anchor':'middle'},'Observed seconds behind Verstappen at lap 20'));
+            add(svg('text',{x:388,y:175,'text-anchor':'middle'},'Seconds behind Max before the possible pit stop'));
         }
         function updateChoice() {
             for (const id of ['fresh','old','early','late']) get('pit-'+id+'-value').textContent = (+get('pit-'+id).value).toFixed(2)+' s';
@@ -787,7 +811,7 @@
             else if (delta>0) { call.textContent='Scenario favors pit now'; explain.textContent='Conditional on the four inputs above, not an observed race outcome.'; }
             else { call.textContent='Scenario favors waiting'; explain.textContent='Conditional on the four inputs above, not an observed race outcome.'; }
         }
-        ['pit-loss','pit-width'].forEach(id=>get(id).addEventListener('input',updateRejoin));
+        get('pit-loss').addEventListener('input',updateRejoin);
         ['pit-fresh','pit-old','pit-early','pit-late'].forEach(id=>get(id).addEventListener('input',updateChoice));
         updateRejoin(); updateChoice();
     })();
